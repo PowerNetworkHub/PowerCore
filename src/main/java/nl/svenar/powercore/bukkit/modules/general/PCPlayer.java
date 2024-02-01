@@ -1,5 +1,6 @@
 package nl.svenar.powercore.bukkit.modules.general;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class PCPlayer {
     private PCLocation lastLocation;
     private boolean banned;
     private String banReason;
+    private Instant lastSeen;
 
     public PCPlayer(UUID uuid, String name) {
         this.uuid = uuid;
@@ -106,5 +108,13 @@ public class PCPlayer {
 
     public String getBanReason() {
         return banReason;
+    }
+
+    public void setLastSeen(Instant lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+    public Instant getLastSeen() {
+        return lastSeen;
     }
 }

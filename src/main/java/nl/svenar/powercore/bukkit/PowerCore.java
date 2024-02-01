@@ -19,11 +19,15 @@ import nl.svenar.powercore.bukkit.commands.compass.CompassAddWaypointCommand;
 import nl.svenar.powercore.bukkit.commands.compass.CompassCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.AdventureCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.CreativeCommand;
+import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SpectatorCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SurvivalCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedInfoCommand;
+import nl.svenar.powercore.bukkit.commands.spawn.SetspawnCommand;
+import nl.svenar.powercore.bukkit.commands.spawn.SpawnCommand;
+import nl.svenar.powercore.bukkit.commands.player.SeenCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.BackCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.OfflineTeleportCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.TeleportCommand;
@@ -52,7 +56,7 @@ public class PowerCore extends JavaPlugin {
     private CompassHandler compassHandler;
     private PCPlayerHandler pcPlayerHandler;
 
-    private ConfigManager pluginConfigManager, playerConfigManager;
+    private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager;
 
     private Instant startupTime;
 
@@ -157,6 +161,8 @@ public class PowerCore extends JavaPlugin {
         pluginConfigManager.saveConfig();
 
         playerConfigManager = new ConfigManager(this, "players.yml", false);
+
+        spawnConfigManager = new ConfigManager(this, "spawn.yml", false);
     }
 
     /**
@@ -218,6 +224,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new SunriseCommand(this));
 
         // Gamemode commands
+        this.acfManager.registerCommand(new GamemodeCommand(this));
         this.acfManager.registerCommand(new SurvivalCommand(this));
         this.acfManager.registerCommand(new CreativeCommand(this));
         this.acfManager.registerCommand(new AdventureCommand(this));
@@ -233,6 +240,11 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new FlyCommand(this));
         this.acfManager.registerCommand(new SpeedCommand(this));
         this.acfManager.registerCommand(new SpeedInfoCommand(this));
+        this.acfManager.registerCommand(new SeenCommand(this));
+
+        // Spawn commands
+        this.acfManager.registerCommand(new SpawnCommand(this));
+        this.acfManager.registerCommand(new SetspawnCommand(this));
     }
 
     /**
@@ -287,7 +299,7 @@ public class PowerCore extends JavaPlugin {
     /**
      * Get the Config manager for the plugin
      * 
-     * @return PaperCommandManager
+     * @return ConfigManager
      */
     public ConfigManager getPluginConfigManager() {
         return pluginConfigManager;
@@ -296,9 +308,18 @@ public class PowerCore extends JavaPlugin {
     /**
      * Get the Config manager for player data
      * 
-     * @return PaperCommandManager
+     * @return ConfigManager
      */
     public ConfigManager getPlayerConfigManager() {
         return playerConfigManager;
+    }
+
+    /**
+     * Get the Config manager for spawn data
+     * 
+     * @return ConfigManager
+     */
+    public ConfigManager getSpawnConfigManager() {
+        return spawnConfigManager;
     }
 }

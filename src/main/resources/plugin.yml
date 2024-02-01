@@ -28,6 +28,9 @@ commands:
   thunder:
     aliases: [storm]
     description: Set the weather to thunder
+  gamemode:
+    aliases: [gm]
+    description: Set the gamemode for yourself or another player
   survival:
     aliases: [gms]
     description: Set your gamemode to survival
@@ -63,6 +66,12 @@ commands:
   unban:
     aliases: [pardon]
     description: Unban a player
+  seen:
+    description: Show when a player was last online
+  spawn:
+    description: Teleport to the spawn location
+  setspawn:
+    description: Set the spawn location
 permissions:
   powercore.compass:
     default: true
@@ -116,4 +125,10 @@ permissions:
   powercore.kick:
     default: op
   powercore.ban:
+    default: op
+  powercore.seen:
+    default: op
+  powercore.spawn:
+    default: true
+  powercore.spawn.set:
     default: op

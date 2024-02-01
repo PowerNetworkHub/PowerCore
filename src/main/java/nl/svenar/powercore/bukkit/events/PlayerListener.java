@@ -1,5 +1,7 @@
 package nl.svenar.powercore.bukkit.events;
 
+import java.time.Instant;
+
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,6 +49,7 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getPlayer());
         pcPlayer.setLogoutLocation(event.getPlayer().getLocation());
+        pcPlayer.setLastSeen(Instant.now());
 
         boolean silentQuit = plugin.getPluginConfigManager().getConfig().getBoolean("event.leave.chat.silent");
         String message = silentQuit ? null
