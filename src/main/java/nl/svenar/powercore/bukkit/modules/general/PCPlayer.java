@@ -1,0 +1,110 @@
+package nl.svenar.powercore.bukkit.modules.general;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.Location;
+
+public class PCPlayer {
+    
+    private UUID uuid;
+    private String name;
+    private List<Waypoint> waypoints;
+    private boolean compassEnabled;
+    private PCLocation logoutLocation;
+    private PCLocation lastLocation;
+    private boolean banned;
+    private String banReason;
+
+    public PCPlayer(UUID uuid, String name) {
+        this.uuid = uuid;
+        this.name = name;
+        waypoints = new ArrayList<>();
+    }
+
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Waypoint> getWaypoints() {
+        return waypoints;
+    }
+
+    public void addWaypoint(Waypoint waypoint) {
+        waypoints.add(waypoint);
+    }
+
+    public void removeWaypoint(Waypoint waypoint) {
+        waypoints.remove(waypoint);
+    }
+
+    public void removeWaypoint(String name) {
+        waypoints.removeIf(waypoint -> waypoint.getName().equalsIgnoreCase(name));
+    }
+
+    public Waypoint getWaypoint(String name) {
+        for (Waypoint waypoint : waypoints) {
+            if (waypoint.getName().equalsIgnoreCase(name)) {
+                return waypoint;
+            }
+        }
+        return null;
+    }
+
+    public boolean isCompassEnabled() {
+        return compassEnabled;
+    }
+
+    public void setCompassEnabled(boolean compassEnabled) {
+        this.compassEnabled = compassEnabled;
+    }
+
+    public void setLogoutLocation(PCLocation location) {
+        this.logoutLocation = location;
+    }
+
+    public void setLogoutLocation(Location location) {
+        setLogoutLocation(new PCLocation(location));
+    }
+
+    public PCLocation getLogoutLocation() {
+        return logoutLocation;
+    }
+
+    public void setLastLocation(PCLocation location) {
+        this.lastLocation = location;
+    }
+
+    public void setLastLocation(Location location) {
+        setLastLocation(new PCLocation(location));
+    }
+
+    public PCLocation getLastLocation() {
+        return lastLocation;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanReason(String reason) {
+        this.banReason = reason;
+    }
+
+    public String getBanReason() {
+        return banReason;
+    }
+}

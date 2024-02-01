@@ -1,0 +1,119 @@
+name: ${project.name}
+version: ${project.version}
+main: nl.svenar.powercore.bukkit.PowerCore
+api-version: 1.13
+authors: [svenar]
+commands:
+  powercore:
+    description: PowerCore command
+    aliases: [core, pcore]
+  compass:
+    description: Show a compass at the top of your screen
+  day:
+    description: Set the time to day
+  night:
+    description: Set the time to night
+  sunset:
+    description: Set the time to sunset
+  sunrise:
+    description: Set the time to sunrise
+  noon:
+    description: Set the time to noon
+  midnight:
+    description: Set the time to midnight
+  sun:
+    description: Set the weather to sunny
+  rain:
+    description: Set the weather to rainy
+  thunder:
+    aliases: [storm]
+    description: Set the weather to thunder
+  survival:
+    aliases: [gms]
+    description: Set your gamemode to survival
+  creative:
+    aliases: [gmc]
+    description: Set your gamemode to creative
+  adventure:
+    aliases: [gma]
+    description: Set your gamemode to adventure
+  spectator:
+    aliases: [gmsp]
+    description: Set your gamemode to spectator
+  teleport:
+    aliases: [tp]
+    description: Teleport to a player
+  offlineteleport:
+    aliases: [offlinetp, otp]
+    description: Teleport to an offline player
+  top:
+    description: Teleport to the highest block
+  fly:
+    description: Toggle fly mode on/off for yourself or another player
+  speed:
+    description: Set the walk/fly speed for yourself or another player
+  speedinfo:
+    description: Show the walk/fly speed for yourself or another player
+  back:
+    description: Teleport back to your previous location
+  kick:
+    description: Kick a player
+  ban:
+    description: Ban a player
+  unban:
+    aliases: [pardon]
+    description: Unban a player
+permissions:
+  powercore.compass:
+    default: true
+  powercore.compass.waypoints:
+    default: op
+  powercore.stats:
+    default: op
+  powercore.time:
+    default: op
+  powercore.weather:
+    default: op
+  powercore.gamemode.*:
+    children:
+      powercore.gamemode: true
+    default: op
+  powercore.gamemode:
+    children:
+      powercore.gamemode.survival: true
+      powercore.gamemode.creative: true
+      powercore.gamemode.adventure: true
+      powercore.gamemode.spectator: true
+    default: op
+  powercore.gamemode.survival:
+    default: op
+  powercore.gamemode.creative:
+    default: op
+  powercore.gamemode.adventure:
+    default: op
+  powercore.gamemode.spectator: 
+    default: op
+  powercore.teleport.*:
+    children:
+      powercore.teleport: true
+      powercore.teleport.offline: true
+      powercore.teleport.top: true
+    default: op
+  powercore.teleport:
+    default: op
+  powercore.teleport.offline:
+    default: op
+  powercore.teleport.top:
+    default: op
+  powercore.fly:
+    default: op
+  powercore.speed:
+    default: op
+  powercore.back:
+    default: true
+  powercore.back.ondeath:
+    default: op
+  powercore.kick:
+    default: op
+  powercore.ban:
+    default: op

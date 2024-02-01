@@ -1,0 +1,151 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>nl.svenar</groupId>
+	<artifactId>powercore</artifactId>
+	<version>0.0.2</version>
+	<name>PowerCore</name>
+	<description>PowerCore: providing core functionality and features.</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<src.dir>src/main/java</src.dir>
+		<rsc.dir>src/main/resources</rsc.dir>
+		<shade.basepattern>nl.svenar.shaded</shade.basepattern>
+		<testserver.location>../../servers/bukkit/latest/plugins</testserver.location>
+	</properties>
+
+	<build>
+		<defaultGoal>clean compile package shade:shade</defaultGoal>
+		<finalName>${project.name}</finalName>
+		<sourceDirectory>${src.dir}</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>${rsc.dir}</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>3.1.0</version>
+					<configuration>
+						<minimizeJar>true</minimizeJar>
+						<createSourcesJar>false</createSourcesJar>
+						<shadeSourcesContent>false</shadeSourcesContent>
+						<createDependencyReducedPom>false</createDependencyReducedPom>
+						<shadedArtifactAttached>false</shadedArtifactAttached>
+						<filters>
+							<filter>
+								<artifact>*:*</artifact>
+								<excludes>
+									<exclude>META-INF/license/**</exclude>
+									<exclude>META-INF/*</exclude>
+									<exclude>META-INF/maven/**</exclude>
+									<exclude>META-INF/versions/*/module-info.class</exclude>
+									<exclude>LICENSE</exclude>
+									<exclude>NOTICE</exclude>
+									<exclude>/*.txt</exclude>
+									<exclude>build.properties</exclude>
+								</excludes>
+							</filter>
+						</filters>
+						<artifactSet>
+							<includes>
+								<include>co.aikar:acf-paper</include>
+							</includes>
+						</artifactSet>
+						<relocations>
+							<relocation>
+								<pattern>co.aikar.commands</pattern>
+								<shadedPattern>${shade.basepattern}.acf</shadedPattern>
+							</relocation>
+							<relocation>
+								<pattern>co.aikar.locales</pattern>
+								<shadedPattern>${shade.basepattern}.locales</shadedPattern>
+							</relocation>
+							<!-- <relocation>
+								<pattern>acf-</pattern>
+								<shadedPattern>${shade.basepattern}.locales/acf-</shadedPattern>
+							</relocation> -->
+						</relocations>
+						<dependencyReducedPomLocation>target/reduced-pom.xml</dependencyReducedPomLocation>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.3.1</version>
+					<configuration>
+						<outputDirectory>${testserver.location}</outputDirectory>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>spigotmc-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
+			<id>svenar</id>
+			<url>https://svenar.nl/repo/</url>
+		</repository>
+		<repository>
+			<id>nexus</id>
+			<name>Lumine Releases</name>
+			<url>https://mvn.lumine.io/repository/maven-public/</url>
+		</repository>
+		<repository>
+			<id>aikar</id>
+			<url>https://repo.aikar.co/content/groups/aikar/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!--Spigot
+		NMS-->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.20.4-R0.1-SNAPSHOT</version>
+			<!-- <classifier>remapped-mojang</classifier> -->
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>co.aikar</groupId>
+			<artifactId>acf-paper</artifactId>
+			<version>0.5.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
