@@ -22,7 +22,7 @@ public class SetspawnCommand extends PowerBaseCommand {
 
     @Default
     @CommandPermission("powercore.spawn.set")
-    public void onCommand(CommandSender sender, String playerName) {
+    public void onCommand(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sendMessage(sender, PowerColor.ChatColor.DARK_RED + "This command can only be used by players.");
             return;
