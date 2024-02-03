@@ -17,6 +17,8 @@ import nl.svenar.powercore.bukkit.commands.admin.StatsCommand;
 import nl.svenar.powercore.bukkit.commands.admin.UnbanCommand;
 import nl.svenar.powercore.bukkit.commands.compass.CompassAddWaypointCommand;
 import nl.svenar.powercore.bukkit.commands.compass.CompassCommand;
+import nl.svenar.powercore.bukkit.commands.compass.CompassDelWaypointCommand;
+import nl.svenar.powercore.bukkit.commands.compass.CompassListWaypointsCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.AdventureCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.CreativeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
@@ -209,6 +211,8 @@ public class PowerCore extends JavaPlugin {
         // Compass commands
         this.acfManager.registerCommand(new CompassCommand(this));
         this.acfManager.registerCommand(new CompassAddWaypointCommand(this));
+        this.acfManager.registerCommand(new CompassDelWaypointCommand(this));
+        this.acfManager.registerCommand(new CompassListWaypointsCommand(this));
 
         // Weather commands
         this.acfManager.registerCommand(new SunCommand(this));
