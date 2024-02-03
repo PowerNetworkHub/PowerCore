@@ -24,6 +24,7 @@ import nl.svenar.powercore.bukkit.commands.gamemode.CreativeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SpectatorCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SurvivalCommand;
+import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedInfoCommand;
@@ -171,6 +172,7 @@ public class PowerCore extends JavaPlugin {
         pluginConfigManager.addDefault("event.leave.chat.silent", false);
         pluginConfigManager.addDefault("event.leave.chat.message", "&0[&4-&0] &7{player} has left the game");
         pluginConfigManager.addDefault("player.default.compass.enabled", false);
+        pluginConfigManager.addDefault("command.spawnmob.limit", 10);
         pluginConfigManager.saveConfig();
 
         playerConfigManager = new ConfigManager(this, "players.yml", false);
@@ -179,6 +181,7 @@ public class PowerCore extends JavaPlugin {
 
         warpConfigManager = new ConfigManager(this, "warps.yml", false);
         warpConfigManager.addDefault("warps", new String[] {});
+        warpConfigManager.saveConfig();
     }
 
     /**
@@ -285,6 +288,9 @@ public class PowerCore extends JavaPlugin {
         // Warp commands
         this.acfManager.registerCommand(new WarpCommand(this));
         this.acfManager.registerCommand(new SetWarpCommand(this));
+
+        // Other commands
+        this.acfManager.registerCommand(new SpawnMobCommand(this));
     }
 
     /**

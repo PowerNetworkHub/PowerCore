@@ -81,6 +81,8 @@ commands:
     description: Teleport to a warp location
   setwarp:
     description: Set a warp location
+  spawnmob:
+    description: Spawn a mob
 permissions:
   powercore.compass:
     default: true
@@ -144,4 +146,6 @@ permissions:
   powercore.warp:
     default: true
   powercore.warp.set:
+    default: op
+  powercore.spawnmob:
     default: op
