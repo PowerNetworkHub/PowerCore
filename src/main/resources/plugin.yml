@@ -108,6 +108,12 @@ commands:
     description: Mute a player
   unmute:
     description: Unmute a player
+  msg:
+    aliases: [whisper]
+    description: Send a private message to a player
+  reply:
+    aliases: [r]
+    description: Reply to a private message
 permissions:
   powercore.compass:
     default: true
@@ -198,3 +204,5 @@ permissions:
     default: op
   powercore.mute:
     default: op
+  powercore.msg:
+    default: true

@@ -35,7 +35,11 @@ public class PowerBaseCommand extends BaseCommand {
     }
 
     protected void sendMessage(CommandSender sender, String message) {
-        sender.sendMessage(PowerColor.ChatColor.BLACK + "[" + PowerColor.ChatColor.DARK_PURPLE + "PC"
+        sendMessageRaw(sender, PowerColor.ChatColor.BLACK + "[" + PowerColor.ChatColor.DARK_PURPLE + "PC"
                 + PowerColor.ChatColor.BLACK + "] " + PowerColor.ChatColor.WHITE + message);
+    }
+
+    protected void sendMessageRaw(CommandSender sender, String message) {
+        sender.sendMessage(message);
     }
 }

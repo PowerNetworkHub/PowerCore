@@ -88,7 +88,7 @@
 								<shadedPattern>${shade.basepattern}.jsonsimple</shadedPattern>
 							</relocation>
 							<relocation>
-								<pattern>org.apache.commons</pattern>
+								<pattern>org.apache.commons.io</pattern>
 								<shadedPattern>${shade.basepattern}.commonsio</shadedPattern>
 							</relocation>
 						</relocations>

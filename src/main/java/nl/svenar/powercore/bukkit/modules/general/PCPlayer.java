@@ -23,6 +23,7 @@ public class PCPlayer {
 
     // Not stored on FS
     private boolean online;
+    private String lastDirectMessageSender;
 
     public PCPlayer(UUID uuid, String name) {
         this.uuid = uuid;
@@ -137,5 +138,13 @@ public class PCPlayer {
 
     public boolean isMuted() {
         return muted;
+    }
+
+    public void setLastDirectMessageSender(String name) {
+        lastDirectMessageSender = name;
+    }
+
+    public String getLastDirectMessageSender() {
+        return lastDirectMessageSender;
     }
 }
