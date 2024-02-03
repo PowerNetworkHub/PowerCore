@@ -54,6 +54,11 @@ public class PCPlayerHandler {
                         .getString("players." + uuidString + ".last_seen")));
             }
 
+            if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".muted")) {
+                pcPlayer.setMuted(plugin.getPlayerConfigManager().getConfig()
+                        .getBoolean("players." + uuidString + ".muted"));
+            }
+
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".logout_location")) {
                 double x = plugin.getPlayerConfigManager().getConfig()
                         .getDouble("players." + uuidString + ".logout_location.x");
@@ -106,6 +111,9 @@ public class PCPlayerHandler {
                     .set("players." + pcPlayer.getUUID().toString() + ".ban.is_banned", pcPlayer.isBanned());
             plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".ban.reason",
                     pcPlayer.getBanReason() != null ? pcPlayer.getBanReason() : "");
+            
+            plugin.getPlayerConfigManager().getConfig()
+                    .set("players." + pcPlayer.getUUID().toString() + ".muted", pcPlayer.isMuted());
 
             if (pcPlayer.getLastSeen() != null) {
                 plugin.getPlayerConfigManager().getConfig().set(

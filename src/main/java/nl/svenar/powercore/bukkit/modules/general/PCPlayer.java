@@ -19,6 +19,7 @@ public class PCPlayer {
     private boolean banned;
     private String banReason;
     private Instant lastSeen;
+    private boolean muted;
 
     // Not stored on FS
     private boolean online;
@@ -128,5 +129,13 @@ public class PCPlayer {
 
     public boolean isOnline() {
         return online;
+    }
+
+    public void setMuted(boolean muted) {
+        this.muted = muted;
+    }
+
+    public boolean isMuted() {
+        return muted;
     }
 }

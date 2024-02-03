@@ -35,8 +35,10 @@ import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
 import nl.svenar.powercore.bukkit.commands.player.GodCommand;
 import nl.svenar.powercore.bukkit.commands.player.HealCommand;
 import nl.svenar.powercore.bukkit.commands.player.InvseeCommand;
+import nl.svenar.powercore.bukkit.commands.player.MuteCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedInfoCommand;
+import nl.svenar.powercore.bukkit.commands.player.UnmuteCommand;
 import nl.svenar.powercore.bukkit.commands.spawn.SetspawnCommand;
 import nl.svenar.powercore.bukkit.commands.spawn.SpawnCommand;
 import nl.svenar.powercore.bukkit.commands.player.SeenCommand;
@@ -268,6 +270,16 @@ public class PowerCore extends JavaPlugin {
                                 .map(PCPlayer::getName)
                                 .collect(Collectors.toList()));
 
+        this.acfManager.getCommandCompletions()
+                .registerAsyncCompletion("mutedpcplayers",
+                        c -> pcPlayerHandler
+                                .getPlayers()
+                                .stream()
+                                .map(playerName -> pcPlayerHandler.getPlayer(playerName))
+                                .filter(PCPlayer::isMuted)
+                                .map(PCPlayer::getName)
+                                .collect(Collectors.toList()));
+
         // Register commands
         this.acfManager.registerCommand(new MainCommand(this));
 
@@ -325,6 +337,8 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new GodCommand(this));
         this.acfManager.registerCommand(new BurnCommand(this));
         this.acfManager.registerCommand(new SmiteCommand(this));
+        this.acfManager.registerCommand(new MuteCommand(this));
+        this.acfManager.registerCommand(new UnmuteCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));

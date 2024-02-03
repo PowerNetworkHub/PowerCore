@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -87,5 +88,14 @@ public class PlayerListener implements Listener {
         }
         PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getEntity());
         pcPlayer.setLastLocation(event.getEntity().getLocation());
+    }
+
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getPlayer());
+        if (pcPlayer.isMuted()) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatColor.RED + "You are muted");
+        }
     }
 }

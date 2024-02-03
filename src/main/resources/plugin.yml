@@ -104,6 +104,10 @@ commands:
     description: Set the name of an item
   itemlore:
     description: Set the lore of an item
+  mute:
+    description: Mute a player
+  unmute:
+    description: Unmute a player
 permissions:
   powercore.compass:
     default: true
@@ -191,4 +195,6 @@ permissions:
   powercore.itemname:
     default: op
   powercore.itemlore:
+    default: op
+  powercore.mute:
     default: op
