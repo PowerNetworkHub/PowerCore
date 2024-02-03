@@ -25,9 +25,11 @@ import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SpectatorCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SurvivalCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
+import nl.svenar.powercore.bukkit.commands.player.BurnCommand;
 import nl.svenar.powercore.bukkit.commands.player.EnderchestCommand;
 import nl.svenar.powercore.bukkit.commands.player.FeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
+import nl.svenar.powercore.bukkit.commands.player.GodCommand;
 import nl.svenar.powercore.bukkit.commands.player.HealCommand;
 import nl.svenar.powercore.bukkit.commands.player.InvseeCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedCommand;
@@ -35,6 +37,7 @@ import nl.svenar.powercore.bukkit.commands.player.SpeedInfoCommand;
 import nl.svenar.powercore.bukkit.commands.spawn.SetspawnCommand;
 import nl.svenar.powercore.bukkit.commands.spawn.SpawnCommand;
 import nl.svenar.powercore.bukkit.commands.player.SeenCommand;
+import nl.svenar.powercore.bukkit.commands.player.SmiteCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.BackCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.OfflineTeleportCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.TeleportCommand;
@@ -288,6 +291,9 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new FeedCommand(this));
         this.acfManager.registerCommand(new EnderchestCommand(this));
         this.acfManager.registerCommand(new InvseeCommand(this));
+        this.acfManager.registerCommand(new GodCommand(this));
+        this.acfManager.registerCommand(new BurnCommand(this));
+        this.acfManager.registerCommand(new SmiteCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));

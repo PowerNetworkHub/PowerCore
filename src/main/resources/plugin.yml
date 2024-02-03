@@ -92,6 +92,12 @@ commands:
     description: Open the enderchest of yourself or another player
   invsee:
     description: Open the inventory of another player
+  god:
+    description: Toggle god mode on/off for yourself or another player
+  burn:
+    description: Set a player on fire
+  smite:
+    description: Strike a player with lightning
 permissions:
   powercore.compass:
     default: true
@@ -167,4 +173,10 @@ permissions:
   powercore.enderchest.others:
     default: op
   powercore.invsee:
+    default: op
+  powercore.god:
+    default: op
+  powercore.burn:
+    default: op
+  powercore.smite:
     default: op
