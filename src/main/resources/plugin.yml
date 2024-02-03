@@ -83,6 +83,10 @@ commands:
     description: Set a warp location
   spawnmob:
     description: Spawn a mob
+  heal:
+    description: Heal yourself or another player
+  feed:
+    description: Feed yourself or another player
 permissions:
   powercore.compass:
     default: true
@@ -148,4 +152,8 @@ permissions:
   powercore.warp.set:
     default: op
   powercore.spawnmob:
+    default: op
+  powercore.heal:
+    default: op
+  powercore.feed:
     default: op

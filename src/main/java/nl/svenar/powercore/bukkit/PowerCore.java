@@ -25,7 +25,9 @@ import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SpectatorCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SurvivalCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
+import nl.svenar.powercore.bukkit.commands.player.FeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
+import nl.svenar.powercore.bukkit.commands.player.HealCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedInfoCommand;
 import nl.svenar.powercore.bukkit.commands.spawn.SetspawnCommand;
@@ -280,6 +282,8 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new SpeedCommand(this));
         this.acfManager.registerCommand(new SpeedInfoCommand(this));
         this.acfManager.registerCommand(new SeenCommand(this));
+        this.acfManager.registerCommand(new HealCommand(this));
+        this.acfManager.registerCommand(new FeedCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));
