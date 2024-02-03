@@ -43,6 +43,8 @@ import nl.svenar.powercore.bukkit.commands.time.SunsetCommand;
 import nl.svenar.powercore.bukkit.commands.time.TimeAddCommand;
 import nl.svenar.powercore.bukkit.commands.time.TimeCommand;
 import nl.svenar.powercore.bukkit.commands.time.TimeSetCommand;
+import nl.svenar.powercore.bukkit.commands.warp.SetWarpCommand;
+import nl.svenar.powercore.bukkit.commands.warp.WarpCommand;
 import nl.svenar.powercore.bukkit.commands.weather.RainCommand;
 import nl.svenar.powercore.bukkit.commands.weather.SunCommand;
 import nl.svenar.powercore.bukkit.commands.weather.ThunderCommand;
@@ -62,7 +64,7 @@ public class PowerCore extends JavaPlugin {
     private CompassHandler compassHandler;
     private PCPlayerHandler pcPlayerHandler;
 
-    private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager;
+    private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager, warpConfigManager;
 
     private Instant startupTime;
 
@@ -129,6 +131,11 @@ public class PowerCore extends JavaPlugin {
             this.pcPlayerHandler.savePlayers();
         }
 
+        pluginConfigManager.saveConfig();
+        playerConfigManager.saveConfig();
+        spawnConfigManager.saveConfig();
+        warpConfigManager.saveConfig();
+
         Chat chat = new Chat();
         chat.console("");
         for (String line : lines) {
@@ -169,6 +176,9 @@ public class PowerCore extends JavaPlugin {
         playerConfigManager = new ConfigManager(this, "players.yml", false);
 
         spawnConfigManager = new ConfigManager(this, "spawn.yml", false);
+
+        warpConfigManager = new ConfigManager(this, "warps.yml", false);
+        warpConfigManager.addDefault("warps", new String[] {});
     }
 
     /**
@@ -197,6 +207,15 @@ public class PowerCore extends JavaPlugin {
 
         this.acfManager.getCommandCompletions().registerAsyncCompletion("pcplayers",
                 c -> pcPlayerHandler.getPlayers().stream().collect(Collectors.toList()));
+
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("warps",
+                c -> {
+                    if (warpConfigManager.getConfig().getConfigurationSection("warps") == null) {
+                        return Arrays.asList();
+                    }
+                    return warpConfigManager.getConfig().getConfigurationSection("warps").getKeys(false).stream()
+                            .collect(Collectors.toList());
+                });
 
         this.acfManager.getCommandCompletions()
                 .registerAsyncCompletion("bannedpcplayers",
@@ -262,6 +281,10 @@ public class PowerCore extends JavaPlugin {
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));
         this.acfManager.registerCommand(new SetspawnCommand(this));
+
+        // Warp commands
+        this.acfManager.registerCommand(new WarpCommand(this));
+        this.acfManager.registerCommand(new SetWarpCommand(this));
     }
 
     /**
@@ -338,5 +361,14 @@ public class PowerCore extends JavaPlugin {
      */
     public ConfigManager getSpawnConfigManager() {
         return spawnConfigManager;
+    }
+
+    /**
+     * Get the Config manager for warp data
+     * 
+     * @return ConfigManager
+     */
+    public ConfigManager getWarpConfigManager() {
+        return warpConfigManager;
     }
 }

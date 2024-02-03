@@ -77,6 +77,10 @@ commands:
     description: Teleport to the spawn location
   setspawn:
     description: Set the spawn location
+  warp:
+    description: Teleport to a warp location
+  setwarp:
+    description: Set a warp location
 permissions:
   powercore.compass:
     default: true
@@ -136,4 +140,8 @@ permissions:
   powercore.spawn:
     default: true
   powercore.spawn.set:
+    default: op
+  powercore.warp:
+    default: true
+  powercore.warp.set:
     default: op
