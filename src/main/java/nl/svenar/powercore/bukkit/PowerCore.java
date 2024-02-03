@@ -40,9 +40,13 @@ import nl.svenar.powercore.bukkit.commands.time.NightCommand;
 import nl.svenar.powercore.bukkit.commands.time.NoonCommand;
 import nl.svenar.powercore.bukkit.commands.time.SunriseCommand;
 import nl.svenar.powercore.bukkit.commands.time.SunsetCommand;
+import nl.svenar.powercore.bukkit.commands.time.TimeAddCommand;
+import nl.svenar.powercore.bukkit.commands.time.TimeCommand;
+import nl.svenar.powercore.bukkit.commands.time.TimeSetCommand;
 import nl.svenar.powercore.bukkit.commands.weather.RainCommand;
 import nl.svenar.powercore.bukkit.commands.weather.SunCommand;
 import nl.svenar.powercore.bukkit.commands.weather.ThunderCommand;
+import nl.svenar.powercore.bukkit.commands.weather.WeatherCommand;
 import nl.svenar.powercore.bukkit.events.PlayerListener;
 import nl.svenar.powercore.bukkit.modules.compass.CompassHandler;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
@@ -186,6 +190,11 @@ public class PowerCore extends JavaPlugin {
 
         this.acfManager.getCommandReplacements().addReplacement("powercorecommand", "powercore|pcore|core");
 
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("time",
+                c -> Arrays.asList("0", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000",
+                        "11000", "12000", "13000", "14000", "15000", "16000", "17000", "18000", "19000", "20000",
+                        "21000", "22000", "23000"));
+
         this.acfManager.getCommandCompletions().registerAsyncCompletion("pcplayers",
                 c -> pcPlayerHandler.getPlayers().stream().collect(Collectors.toList()));
 
@@ -215,11 +224,15 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new CompassListWaypointsCommand(this));
 
         // Weather commands
+        this.acfManager.registerCommand(new WeatherCommand(this));
         this.acfManager.registerCommand(new SunCommand(this));
         this.acfManager.registerCommand(new RainCommand(this));
         this.acfManager.registerCommand(new ThunderCommand(this));
 
         // Time commands
+        this.acfManager.registerCommand(new TimeCommand(this));
+        this.acfManager.registerCommand(new TimeSetCommand(this));
+        this.acfManager.registerCommand(new TimeAddCommand(this));
         this.acfManager.registerCommand(new DayCommand(this));
         this.acfManager.registerCommand(new NoonCommand(this));
         this.acfManager.registerCommand(new SunsetCommand(this));

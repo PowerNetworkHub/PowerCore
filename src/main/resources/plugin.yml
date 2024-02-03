@@ -9,6 +9,8 @@ commands:
     aliases: [core, pcore]
   compass:
     description: Show a compass at the top of your screen
+  time:
+    description: Set the time
   day:
     description: Set the time to day
   night:
@@ -21,7 +23,10 @@ commands:
     description: Set the time to noon
   midnight:
     description: Set the time to midnight
+  weather:
+    description: Set the weather
   sun:
+    aliases: [clear]
     description: Set the weather to sunny
   rain:
     description: Set the weather to rainy
