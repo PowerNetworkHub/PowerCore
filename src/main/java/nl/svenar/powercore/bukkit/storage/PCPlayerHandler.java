@@ -13,6 +13,7 @@ import nl.svenar.powercore.bukkit.PowerCore;
 import nl.svenar.powercore.bukkit.modules.general.PCLocation;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
 import nl.svenar.powercore.bukkit.modules.general.Waypoint;
+import nl.svenar.powercore.bukkit.utils.TimeConverter;
 
 public class PCPlayerHandler {
 
@@ -35,8 +36,8 @@ public class PCPlayerHandler {
             PCPlayer pcPlayer = new PCPlayer(uuid, name);
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".compass.enabled")) {
-            pcPlayer.setCompassEnabled(plugin.getPlayerConfigManager().getConfig()
-                    .getBoolean("players." + uuidString + ".compass.enabled"));
+                pcPlayer.setCompassEnabled(plugin.getPlayerConfigManager().getConfig()
+                        .getBoolean("players." + uuidString + ".compass.enabled"));
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".ban.is_banned")) {
@@ -46,6 +47,11 @@ public class PCPlayerHandler {
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".ban.reason")) {
                 pcPlayer.setBanReason(plugin.getPlayerConfigManager().getConfig()
                         .getString("players." + uuidString + ".ban.reason"));
+            }
+
+            if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".last_seen")) {
+                pcPlayer.setLastSeen(TimeConverter.stringToInstant(plugin.getPlayerConfigManager().getConfig()
+                        .getString("players." + uuidString + ".last_seen")));
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".logout_location")) {
@@ -75,7 +81,8 @@ public class PCPlayerHandler {
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".compass.waypoints")
-                    && plugin.getPlayerConfigManager().getConfig().isList("players." + uuidString + ".compass.waypoints")) {
+                    && plugin.getPlayerConfigManager().getConfig()
+                            .isList("players." + uuidString + ".compass.waypoints")) {
                 for (String waypointData : plugin.getPlayerConfigManager().getConfig()
                         .getStringList("players." + uuidString + ".compass.waypoints")) {
                     pcPlayer.addWaypoint(Waypoint.fromString(waypointData));
@@ -99,6 +106,12 @@ public class PCPlayerHandler {
                     .set("players." + pcPlayer.getUUID().toString() + ".ban.is_banned", pcPlayer.isBanned());
             plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".ban.reason",
                     pcPlayer.getBanReason() != null ? pcPlayer.getBanReason() : "");
+
+            if (pcPlayer.getLastSeen() != null) {
+                plugin.getPlayerConfigManager().getConfig().set(
+                        "players." + pcPlayer.getUUID().toString() + ".last_seen",
+                        TimeConverter.instantToString(pcPlayer.getLastSeen()));
+            }
 
             if (pcPlayer.getLogoutLocation() != null) {
                 plugin.getPlayerConfigManager().getConfig().set(
@@ -134,7 +147,8 @@ public class PCPlayerHandler {
             for (Waypoint waypoint : pcPlayer.getWaypoints()) {
                 waypointStrings.add(waypoint.toString());
             }
-            plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".compass.waypoints",
+            plugin.getPlayerConfigManager().getConfig().set(
+                    "players." + pcPlayer.getUUID().toString() + ".compass.waypoints",
                     waypointStrings);
         }
 

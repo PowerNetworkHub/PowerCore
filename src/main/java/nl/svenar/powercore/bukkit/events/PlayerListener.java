@@ -35,7 +35,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        plugin.getPCPlayerHandler().getPlayer(event.getPlayer());
+        PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getPlayer());
+        pcPlayer.setOnline(true);
 
         boolean silentJoin = plugin.getPluginConfigManager().getConfig().getBoolean("event.join.chat.silent");
         String message = silentJoin ? null
@@ -50,6 +51,7 @@ public class PlayerListener implements Listener {
         PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getPlayer());
         pcPlayer.setLogoutLocation(event.getPlayer().getLocation());
         pcPlayer.setLastSeen(Instant.now());
+        pcPlayer.setOnline(false);
 
         boolean silentQuit = plugin.getPluginConfigManager().getConfig().getBoolean("event.leave.chat.silent");
         String message = silentQuit ? null

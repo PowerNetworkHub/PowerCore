@@ -9,6 +9,7 @@ import org.bukkit.Location;
 
 public class PCPlayer {
     
+    // Stored on FS
     private UUID uuid;
     private String name;
     private List<Waypoint> waypoints;
@@ -18,6 +19,9 @@ public class PCPlayer {
     private boolean banned;
     private String banReason;
     private Instant lastSeen;
+
+    // Not stored on FS
+    private boolean online;
 
     public PCPlayer(UUID uuid, String name) {
         this.uuid = uuid;
@@ -116,5 +120,13 @@ public class PCPlayer {
 
     public Instant getLastSeen() {
         return lastSeen;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
+    public boolean isOnline() {
+        return online;
     }
 }

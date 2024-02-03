@@ -1,10 +1,13 @@
 package nl.svenar.powercore.bukkit.commands.player;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.bukkit.command.CommandSender;
 
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
@@ -23,14 +26,24 @@ public class SeenCommand extends PowerBaseCommand {
 
     @Default
     @CommandPermission("powercore.seen")
+    @CommandCompletion("@pcplayers")
     public void onCommand(CommandSender sender, String playerName) {
         PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(playerName);
         if (pcPlayer.getLastSeen() == null) {
             sendMessage(sender, PowerColor.ChatColor.DARK_RED + "No history found for this player.");
             return;
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        sendMessage(sender, pcPlayer.getName() + " was last seen on " + formatter.format(pcPlayer.getLastSeen()));
+        boolean online = pcPlayer.isOnline();
+
+        if (online) {
+            sendMessage(sender, playerName + " is currently online!");
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            ZonedDateTime zonedDateTime = pcPlayer.getLastSeen().atZone(ZoneId.systemDefault());
+            String formattedDateTime = formatter.format(zonedDateTime);
+            
+            sendMessage(sender, pcPlayer.getName() + " was last seen on " + formattedDateTime);
+        }
     }
 
 }
