@@ -118,6 +118,8 @@ commands:
     description: Kill a player
   killall:
     description: Kill all players / mobs / entities
+  helpop:
+    description: Ask for help from the staff
 permissions:
   powercore.compass:
     default: true
@@ -215,4 +217,8 @@ permissions:
   powercore.kill:
     default: op
   powercore.killall:
+    default: op
+  powercore.helpop:
+    default: true
+  powercore.helpop.receive:
     default: op

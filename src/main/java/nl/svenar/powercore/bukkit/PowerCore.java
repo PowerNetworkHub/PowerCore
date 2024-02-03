@@ -36,6 +36,7 @@ import nl.svenar.powercore.bukkit.commands.player.FeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
 import nl.svenar.powercore.bukkit.commands.player.GodCommand;
 import nl.svenar.powercore.bukkit.commands.player.HealCommand;
+import nl.svenar.powercore.bukkit.commands.player.HelpopCommand;
 import nl.svenar.powercore.bukkit.commands.player.InvseeCommand;
 import nl.svenar.powercore.bukkit.commands.player.MsgCommand;
 import nl.svenar.powercore.bukkit.commands.player.MuteCommand;
@@ -347,6 +348,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new UnmuteCommand(this));
         this.acfManager.registerCommand(new MsgCommand(this));
         this.acfManager.registerCommand(new ReplyCommand(this));
+        this.acfManager.registerCommand(new HelpopCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));
