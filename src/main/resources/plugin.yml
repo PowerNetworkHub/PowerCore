@@ -100,6 +100,10 @@ commands:
     description: Strike a player with lightning
   whitelist:
     description: Manage the whitelist
+  itemname:
+    description: Set the name of an item
+  itemlore:
+    description: Set the lore of an item
 permissions:
   powercore.compass:
     default: true
@@ -183,4 +187,8 @@ permissions:
   powercore.smite:
     default: op
   powercore.whitelist:
+    default: op
+  powercore.itemname:
+    default: op
+  powercore.itemlore:
     default: op

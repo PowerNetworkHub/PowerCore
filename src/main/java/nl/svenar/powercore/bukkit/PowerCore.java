@@ -25,6 +25,8 @@ import nl.svenar.powercore.bukkit.commands.gamemode.CreativeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SpectatorCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SurvivalCommand;
+import nl.svenar.powercore.bukkit.commands.item.ItemLoreCommand;
+import nl.svenar.powercore.bukkit.commands.item.ItemNameCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
 import nl.svenar.powercore.bukkit.commands.player.BurnCommand;
 import nl.svenar.powercore.bukkit.commands.player.EnderchestCommand;
@@ -338,6 +340,10 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new WhitelistRemoveCommand(this));
         this.acfManager.registerCommand(new WhitelistEnableCommand(this));
         this.acfManager.registerCommand(new WhitelistDisableCommand(this));
+
+        // Item commands
+        this.acfManager.registerCommand(new ItemNameCommand(this));
+        this.acfManager.registerCommand(new ItemLoreCommand(this));
 
         // Other commands
         this.acfManager.registerCommand(new SpawnMobCommand(this));
