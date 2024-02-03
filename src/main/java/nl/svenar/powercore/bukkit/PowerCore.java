@@ -25,6 +25,7 @@ import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SpectatorCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SurvivalCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
+import nl.svenar.powercore.bukkit.commands.player.EnderchestCommand;
 import nl.svenar.powercore.bukkit.commands.player.FeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
 import nl.svenar.powercore.bukkit.commands.player.HealCommand;
@@ -284,6 +285,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new SeenCommand(this));
         this.acfManager.registerCommand(new HealCommand(this));
         this.acfManager.registerCommand(new FeedCommand(this));
+        this.acfManager.registerCommand(new EnderchestCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));

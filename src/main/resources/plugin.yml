@@ -87,6 +87,9 @@ commands:
     description: Heal yourself or another player
   feed:
     description: Feed yourself or another player
+  enderchest:
+    aliases: [ec]
+    description: Open the enderchest of yourself or another player
 permissions:
   powercore.compass:
     default: true
@@ -156,4 +159,8 @@ permissions:
   powercore.heal:
     default: op
   powercore.feed:
+    default: op
+  powercore.enderchest:
+    default: op
+  powercore.enderchest.others:
     default: op
