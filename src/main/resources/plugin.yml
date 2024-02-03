@@ -114,6 +114,8 @@ commands:
   reply:
     aliases: [r]
     description: Reply to a private message
+  kill:
+    description: Kill a player
 permissions:
   powercore.compass:
     default: true
@@ -206,3 +208,5 @@ permissions:
     default: op
   powercore.msg:
     default: true
+  powercore.kill:
+    default: op
