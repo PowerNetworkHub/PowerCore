@@ -2,6 +2,7 @@ package nl.svenar.powercore.bukkit;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,12 +58,18 @@ import nl.svenar.powercore.bukkit.commands.weather.RainCommand;
 import nl.svenar.powercore.bukkit.commands.weather.SunCommand;
 import nl.svenar.powercore.bukkit.commands.weather.ThunderCommand;
 import nl.svenar.powercore.bukkit.commands.weather.WeatherCommand;
+import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistAddCommand;
+import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistDisableCommand;
+import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistEnableCommand;
+import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistListCommand;
+import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistRemoveCommand;
 import nl.svenar.powercore.bukkit.events.PlayerListener;
 import nl.svenar.powercore.bukkit.modules.compass.CompassHandler;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
 import nl.svenar.powercore.bukkit.storage.ConfigManager;
 import nl.svenar.powercore.bukkit.storage.PCPlayerHandler;
 import nl.svenar.powercore.bukkit.utils.Chat;
+import nl.svenar.powercore.bukkit.utils.MojangUtils;
 import nl.svenar.powercore.bukkit.utils.Util;
 import nl.svenar.powercore.common.utils.PowerColor;
 
@@ -72,7 +79,8 @@ public class PowerCore extends JavaPlugin {
     private CompassHandler compassHandler;
     private PCPlayerHandler pcPlayerHandler;
 
-    private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager, warpConfigManager;
+    private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager, warpConfigManager,
+            whitelistConfigManager;
 
     private Instant startupTime;
 
@@ -143,6 +151,7 @@ public class PowerCore extends JavaPlugin {
         playerConfigManager.saveConfig();
         spawnConfigManager.saveConfig();
         warpConfigManager.saveConfig();
+        whitelistConfigManager.saveConfig();
 
         Chat chat = new Chat();
         chat.console("");
@@ -180,7 +189,6 @@ public class PowerCore extends JavaPlugin {
         pluginConfigManager.addDefault("event.leave.chat.message", "&0[&4-&0] &7{player} has left the game");
         pluginConfigManager.addDefault("player.default.compass.enabled", false);
         pluginConfigManager.addDefault("command.spawnmob.limit", 10);
-        pluginConfigManager.saveConfig();
 
         playerConfigManager = new ConfigManager(this, "players.yml", false);
 
@@ -188,7 +196,11 @@ public class PowerCore extends JavaPlugin {
 
         warpConfigManager = new ConfigManager(this, "warps.yml", false);
         warpConfigManager.addDefault("warps", new String[] {});
-        warpConfigManager.saveConfig();
+
+        whitelistConfigManager = new ConfigManager(this, "whitelist.yml", false);
+        whitelistConfigManager.addDefault("whitelist.enabled", false);
+        whitelistConfigManager.addDefault("whitelist.kickmessage", "&cYou are not whitelisted on this server");
+        whitelistConfigManager.addDefault("whitelist.players", new String[] {});
     }
 
     /**
@@ -226,6 +238,23 @@ public class PowerCore extends JavaPlugin {
                     return warpConfigManager.getConfig().getConfigurationSection("warps").getKeys(false).stream()
                             .collect(Collectors.toList());
                 });
+
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("whitelistedplayers", c -> {
+            try {
+                List<String> players = new ArrayList<>();
+                for (String uuid : whitelistConfigManager.getConfig().getStringList("whitelist.players")) {
+                    PCPlayer pcPlayer = pcPlayerHandler.getPlayer(uuid);
+                    if (pcPlayer != null) {
+                        players.add(pcPlayer.getName());
+                    } else {
+                        players.add(MojangUtils.getNameFromAPI(uuid));
+                    }
+                }
+                return players;
+            } catch (Exception e) {
+                return Arrays.asList();
+            }
+        });
 
         this.acfManager.getCommandCompletions()
                 .registerAsyncCompletion("bannedpcplayers",
@@ -302,6 +331,13 @@ public class PowerCore extends JavaPlugin {
         // Warp commands
         this.acfManager.registerCommand(new WarpCommand(this));
         this.acfManager.registerCommand(new SetWarpCommand(this));
+
+        // Whitelist commands
+        this.acfManager.registerCommand(new WhitelistListCommand(this));
+        this.acfManager.registerCommand(new WhitelistAddCommand(this));
+        this.acfManager.registerCommand(new WhitelistRemoveCommand(this));
+        this.acfManager.registerCommand(new WhitelistEnableCommand(this));
+        this.acfManager.registerCommand(new WhitelistDisableCommand(this));
 
         // Other commands
         this.acfManager.registerCommand(new SpawnMobCommand(this));
@@ -390,5 +426,14 @@ public class PowerCore extends JavaPlugin {
      */
     public ConfigManager getWarpConfigManager() {
         return warpConfigManager;
+    }
+
+    /**
+     * Get the Config manager for whitelist data
+     * 
+     * @return ConfigManager
+     */
+    public ConfigManager getWhitelistConfigManager() {
+        return whitelistConfigManager;
     }
 }

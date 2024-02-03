@@ -98,6 +98,8 @@ commands:
     description: Set a player on fire
   smite:
     description: Strike a player with lightning
+  whitelist:
+    description: Manage the whitelist
 permissions:
   powercore.compass:
     default: true
@@ -179,4 +181,6 @@ permissions:
   powercore.burn:
     default: op
   powercore.smite:
+    default: op
+  powercore.whitelist:
     default: op

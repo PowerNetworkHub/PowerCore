@@ -24,6 +24,15 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerLogin(AsyncPlayerPreLoginEvent event) {
+        if (plugin.getWhitelistConfigManager().getConfig().getBoolean("whitelist.enabled")) {
+            if (!plugin.getWhitelistConfigManager().getConfig().getStringList("whitelist.players")
+                    .contains(event.getUniqueId().toString())) {
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
+                        ChatColor.translateAlternateColorCodes('&',
+                                plugin.getWhitelistConfigManager().getConfig().getString("whitelist.kickmessage")));
+            }
+        }
+
         PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getUniqueId());
         if (pcPlayer == null) {
             return;

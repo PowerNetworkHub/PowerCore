@@ -66,6 +66,8 @@
 						<artifactSet>
 							<includes>
 								<include>co.aikar:acf-paper</include>
+								<include>com.googlecode.json-simple:json-simple</include>
+								<include>commons-io:commons-io</include>
 							</includes>
 						</artifactSet>
 						<relocations>
@@ -81,6 +83,14 @@
 								<pattern>acf-</pattern>
 								<shadedPattern>${shade.basepattern}.locales/acf-</shadedPattern>
 							</relocation> -->
+							<relocation>
+								<pattern>org.json.simple</pattern>
+								<shadedPattern>${shade.basepattern}.jsonsimple</shadedPattern>
+							</relocation>
+							<relocation>
+								<pattern>org.apache.commons</pattern>
+								<shadedPattern>${shade.basepattern}.commonsio</shadedPattern>
+							</relocation>
 						</relocations>
 						<dependencyReducedPomLocation>target/reduced-pom.xml</dependencyReducedPomLocation>
 					</configuration>
@@ -146,6 +156,18 @@
 			<groupId>co.aikar</groupId>
 			<artifactId>acf-paper</artifactId>
 			<version>0.5.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.15.1</version>
 		</dependency>
 	</dependencies>
 </project>
