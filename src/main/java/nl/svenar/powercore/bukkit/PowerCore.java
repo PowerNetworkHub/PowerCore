@@ -15,6 +15,7 @@ import nl.svenar.powercore.bukkit.commands.MainCommand;
 import nl.svenar.powercore.bukkit.commands.admin.BanCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KickCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KillCommand;
+import nl.svenar.powercore.bukkit.commands.admin.KillallCommand;
 import nl.svenar.powercore.bukkit.commands.admin.StatsCommand;
 import nl.svenar.powercore.bukkit.commands.admin.UnbanCommand;
 import nl.svenar.powercore.bukkit.commands.compass.CompassAddWaypointCommand;
@@ -292,6 +293,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new BanCommand(this));
         this.acfManager.registerCommand(new UnbanCommand(this));
         this.acfManager.registerCommand(new KillCommand(this));
+        this.acfManager.registerCommand(new KillallCommand(this));
 
         // Compass commands
         this.acfManager.registerCommand(new CompassCommand(this));

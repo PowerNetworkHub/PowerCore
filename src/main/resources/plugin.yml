@@ -116,6 +116,8 @@ commands:
     description: Reply to a private message
   kill:
     description: Kill a player
+  killall:
+    description: Kill all players / mobs / entities
 permissions:
   powercore.compass:
     default: true
@@ -209,4 +211,6 @@ permissions:
   powercore.msg:
     default: true
   powercore.kill:
+    default: op
+  powercore.killall:
     default: op
