@@ -90,6 +90,8 @@ commands:
   enderchest:
     aliases: [ec]
     description: Open the enderchest of yourself or another player
+  invsee:
+    description: Open the inventory of another player
 permissions:
   powercore.compass:
     default: true
@@ -163,4 +165,6 @@ permissions:
   powercore.enderchest:
     default: op
   powercore.enderchest.others:
+    default: op
+  powercore.invsee:
     default: op

@@ -29,6 +29,7 @@ import nl.svenar.powercore.bukkit.commands.player.EnderchestCommand;
 import nl.svenar.powercore.bukkit.commands.player.FeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
 import nl.svenar.powercore.bukkit.commands.player.HealCommand;
+import nl.svenar.powercore.bukkit.commands.player.InvseeCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.SpeedInfoCommand;
 import nl.svenar.powercore.bukkit.commands.spawn.SetspawnCommand;
@@ -286,6 +287,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new HealCommand(this));
         this.acfManager.registerCommand(new FeedCommand(this));
         this.acfManager.registerCommand(new EnderchestCommand(this));
+        this.acfManager.registerCommand(new InvseeCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));
