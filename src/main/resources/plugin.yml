@@ -210,6 +210,8 @@ permissions:
     default: op
   powercore.msg:
     default: true
+  powercore.msg.spy:
+    default: op
   powercore.kill:
     default: op
   powercore.killall:

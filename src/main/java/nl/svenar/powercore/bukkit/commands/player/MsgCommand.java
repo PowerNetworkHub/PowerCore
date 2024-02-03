@@ -53,9 +53,18 @@ public class MsgCommand extends PowerBaseCommand {
         String messageToTarget = PowerColor.ChatColor.DARK_GRAY + "[" + PowerColor.ChatColor.GOLD + sender.getName()
                 + PowerColor.ChatColor.DARK_PURPLE + " -> " + PowerColor.ChatColor.GOLD + "Me"
                 + PowerColor.ChatColor.DARK_GRAY + "] " + PowerColor.ChatColor.RESET + message;
+        String messageToSpy = PowerColor.ChatColor.DARK_GRAY + "[" + PowerColor.ChatColor.GOLD + sender.getName()
+                + PowerColor.ChatColor.DARK_PURPLE + " -> " + PowerColor.ChatColor.GOLD + targetPlayer.getName()
+                + PowerColor.ChatColor.DARK_GRAY + "] " + PowerColor.ChatColor.RESET + message;
 
         sendMessageRaw(sender, messageToSender);
         sendMessageRaw(targetPlayer, messageToTarget);
+
+        for (Player spyPlayer : plugin.getServer().getOnlinePlayers()) {
+            if (spyPlayer.hasPermission("powercore.msg.spy") && spyPlayer != sender && spyPlayer != targetPlayer) {
+                sendMessageRaw(spyPlayer, messageToSpy);
+            }
+        }
     }
 
 }
