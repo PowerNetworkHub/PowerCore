@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionType;
 
 import co.aikar.commands.PaperCommandManager;
 import nl.svenar.powercore.bukkit.commands.MainCommand;
@@ -17,6 +18,7 @@ import nl.svenar.powercore.bukkit.commands.admin.KickCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KillCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KillallCommand;
 import nl.svenar.powercore.bukkit.commands.admin.StatsCommand;
+import nl.svenar.powercore.bukkit.commands.admin.SudoCommand;
 import nl.svenar.powercore.bukkit.commands.admin.UnbanCommand;
 import nl.svenar.powercore.bukkit.commands.compass.CompassAddWaypointCommand;
 import nl.svenar.powercore.bukkit.commands.compass.CompassCommand;
@@ -31,6 +33,7 @@ import nl.svenar.powercore.bukkit.commands.item.ItemLoreCommand;
 import nl.svenar.powercore.bukkit.commands.item.ItemNameCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
 import nl.svenar.powercore.bukkit.commands.player.BurnCommand;
+import nl.svenar.powercore.bukkit.commands.player.EffectCommand;
 import nl.svenar.powercore.bukkit.commands.player.EnderchestCommand;
 import nl.svenar.powercore.bukkit.commands.player.FeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
@@ -235,6 +238,16 @@ public class PowerCore extends JavaPlugin {
                 c -> Arrays.asList("0", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000",
                         "11000", "12000", "13000", "14000", "15000", "16000", "17000", "18000", "19000", "20000",
                         "21000", "22000", "23000"));
+        
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("effects", c -> {
+            List<String> effects = new ArrayList<>();
+            for (PotionType potionType : PotionType.values()) {
+                effects.add(potionType.name().toLowerCase());
+            }
+            return effects;
+        });
+
+        
 
         this.acfManager.getCommandCompletions().registerAsyncCompletion("pcplayers",
                 c -> pcPlayerHandler.getPlayers().stream().collect(Collectors.toList()));
@@ -295,6 +308,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new UnbanCommand(this));
         this.acfManager.registerCommand(new KillCommand(this));
         this.acfManager.registerCommand(new KillallCommand(this));
+        this.acfManager.registerCommand(new SudoCommand(this));
 
         // Compass commands
         this.acfManager.registerCommand(new CompassCommand(this));
@@ -349,6 +363,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new MsgCommand(this));
         this.acfManager.registerCommand(new ReplyCommand(this));
         this.acfManager.registerCommand(new HelpopCommand(this));
+        this.acfManager.registerCommand(new EffectCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));
