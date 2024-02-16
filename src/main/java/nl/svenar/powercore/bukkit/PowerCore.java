@@ -17,6 +17,7 @@ import nl.svenar.powercore.bukkit.commands.admin.BanCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KickCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KillCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KillallCommand;
+import nl.svenar.powercore.bukkit.commands.admin.ReloadCommand;
 import nl.svenar.powercore.bukkit.commands.admin.StatsCommand;
 import nl.svenar.powercore.bukkit.commands.admin.SudoCommand;
 import nl.svenar.powercore.bukkit.commands.admin.UnbanCommand;
@@ -29,15 +30,20 @@ import nl.svenar.powercore.bukkit.commands.gamemode.CreativeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.GamemodeCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SpectatorCommand;
 import nl.svenar.powercore.bukkit.commands.gamemode.SurvivalCommand;
+import nl.svenar.powercore.bukkit.commands.home.DelHomeCommand;
+import nl.svenar.powercore.bukkit.commands.home.HomeCommand;
+import nl.svenar.powercore.bukkit.commands.home.SetHomeCommand;
 import nl.svenar.powercore.bukkit.commands.item.ItemLoreCommand;
 import nl.svenar.powercore.bukkit.commands.item.ItemNameCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
 import nl.svenar.powercore.bukkit.commands.player.BurnCommand;
+import nl.svenar.powercore.bukkit.commands.player.ClearInventoryCommand;
 import nl.svenar.powercore.bukkit.commands.player.EffectCommand;
 import nl.svenar.powercore.bukkit.commands.player.EnderchestCommand;
 import nl.svenar.powercore.bukkit.commands.player.FeedCommand;
 import nl.svenar.powercore.bukkit.commands.player.FlyCommand;
 import nl.svenar.powercore.bukkit.commands.player.GodCommand;
+import nl.svenar.powercore.bukkit.commands.player.HatCommand;
 import nl.svenar.powercore.bukkit.commands.player.HealCommand;
 import nl.svenar.powercore.bukkit.commands.player.HelpopCommand;
 import nl.svenar.powercore.bukkit.commands.player.InvseeCommand;
@@ -194,6 +200,14 @@ public class PowerCore extends JavaPlugin {
      * The config should always load first
      */
     private void setupConfig() {
+        loadPluginConfig();
+        loadPlayerConfig();
+        loadSpawnConfig();
+        loadWarpConfig();
+        loadWhitelistConfig();
+    }
+
+    public void loadPluginConfig() {
         pluginConfigManager = new ConfigManager(this, "config.yml", false);
         pluginConfigManager.addDefault("event.join.chat.silent", false);
         pluginConfigManager.addDefault("event.join.chat.message", "&0[&2+&0] &7{player} has joined the game");
@@ -201,14 +215,22 @@ public class PowerCore extends JavaPlugin {
         pluginConfigManager.addDefault("event.leave.chat.message", "&0[&4-&0] &7{player} has left the game");
         pluginConfigManager.addDefault("player.default.compass.enabled", false);
         pluginConfigManager.addDefault("command.spawnmob.limit", 10);
+    }
 
+    public void loadPlayerConfig() {
         playerConfigManager = new ConfigManager(this, "players.yml", false);
+    }
 
+    public void loadSpawnConfig() {
         spawnConfigManager = new ConfigManager(this, "spawn.yml", false);
+    }
 
+    public void loadWarpConfig() {
         warpConfigManager = new ConfigManager(this, "warps.yml", false);
         warpConfigManager.addDefault("warps", new String[] {});
+    }
 
+    public void loadWhitelistConfig() {
         whitelistConfigManager = new ConfigManager(this, "whitelist.yml", false);
         whitelistConfigManager.addDefault("whitelist.enabled", false);
         whitelistConfigManager.addDefault("whitelist.kickmessage", "&cYou are not whitelisted on this server");
@@ -238,7 +260,10 @@ public class PowerCore extends JavaPlugin {
                 c -> Arrays.asList("0", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000",
                         "11000", "12000", "13000", "14000", "15000", "16000", "17000", "18000", "19000", "20000",
                         "21000", "22000", "23000"));
-        
+
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("reloadable",
+                c -> Arrays.asList("config", "players", "spawn", "warps", "whitelist", "all"));
+
         this.acfManager.getCommandCompletions().registerAsyncCompletion("effects", c -> {
             List<String> effects = new ArrayList<>();
             for (PotionType potionType : PotionType.values()) {
@@ -247,7 +272,14 @@ public class PowerCore extends JavaPlugin {
             return effects;
         });
 
-        
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("pchomes",
+                c -> {
+                    List<String> homes = new ArrayList<>();
+                    for (String home : pcPlayerHandler.getPlayer(c.getIssuer().getUniqueId()).getHomes().keySet()) {
+                        homes.add(home);
+                    }
+                    return homes;
+                });
 
         this.acfManager.getCommandCompletions().registerAsyncCompletion("pcplayers",
                 c -> pcPlayerHandler.getPlayers().stream().collect(Collectors.toList()));
@@ -301,8 +333,11 @@ public class PowerCore extends JavaPlugin {
         // Register commands
         this.acfManager.registerCommand(new MainCommand(this));
 
-        // Admin commands
+        // Plugin commands
         this.acfManager.registerCommand(new StatsCommand(this));
+        this.acfManager.registerCommand(new ReloadCommand(this));
+
+        // Admin commands
         this.acfManager.registerCommand(new KickCommand(this));
         this.acfManager.registerCommand(new BanCommand(this));
         this.acfManager.registerCommand(new UnbanCommand(this));
@@ -364,6 +399,8 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new ReplyCommand(this));
         this.acfManager.registerCommand(new HelpopCommand(this));
         this.acfManager.registerCommand(new EffectCommand(this));
+        this.acfManager.registerCommand(new HatCommand(this));
+        this.acfManager.registerCommand(new ClearInventoryCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));
@@ -383,6 +420,11 @@ public class PowerCore extends JavaPlugin {
         // Item commands
         this.acfManager.registerCommand(new ItemNameCommand(this));
         this.acfManager.registerCommand(new ItemLoreCommand(this));
+
+        // Home commands
+        this.acfManager.registerCommand(new HomeCommand(this));
+        this.acfManager.registerCommand(new SetHomeCommand(this));
+        this.acfManager.registerCommand(new DelHomeCommand(this));
 
         // Other commands
         this.acfManager.registerCommand(new SpawnMobCommand(this));

@@ -9,7 +9,7 @@ import co.aikar.commands.annotation.Description;
 import nl.svenar.powercore.bukkit.PowerCore;
 import nl.svenar.powercore.bukkit.commands.PowerBaseCommand;
 
-@CommandAlias("sun|clear")
+@CommandAlias("sun")
 @Description("Set the weather to sunny")
 public class SunCommand extends PowerBaseCommand {
 

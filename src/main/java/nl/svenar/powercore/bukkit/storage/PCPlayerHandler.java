@@ -94,6 +94,25 @@ public class PCPlayerHandler {
                 }
             }
 
+            if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".homes")
+                    && plugin.getPlayerConfigManager().getConfig()
+                            .isConfigurationSection("players." + uuidString + ".homes")) {
+                for (String homeName : plugin.getPlayerConfigManager().getConfig()
+                        .getConfigurationSection("players." + uuidString + ".homes").getKeys(false)) {
+                    String world = plugin.getPlayerConfigManager().getConfig()
+                            .getString("players." + uuidString + ".homes." + homeName + ".world");
+                    double x = plugin.getPlayerConfigManager().getConfig()
+                            .getDouble("players." + uuidString + ".homes." + homeName + ".x");
+                    double y = plugin.getPlayerConfigManager().getConfig().getDouble(
+                            "players." + uuidString + ".homes." + homeName + ".y");
+                    double z = plugin.getPlayerConfigManager().getConfig()
+                            .getDouble("players." + uuidString + ".homes." + homeName + ".z");
+
+                    PCLocation homeLocation = new PCLocation(world, x, y, z);
+                    pcPlayer.addHome(homeName, homeLocation);
+                }
+            }
+
             players.put(uuid, pcPlayer);
         }
     }
@@ -111,7 +130,7 @@ public class PCPlayerHandler {
                     .set("players." + pcPlayer.getUUID().toString() + ".ban.is_banned", pcPlayer.isBanned());
             plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".ban.reason",
                     pcPlayer.getBanReason() != null ? pcPlayer.getBanReason() : "");
-            
+
             plugin.getPlayerConfigManager().getConfig()
                     .set("players." + pcPlayer.getUUID().toString() + ".muted", pcPlayer.isMuted());
 
@@ -158,6 +177,22 @@ public class PCPlayerHandler {
             plugin.getPlayerConfigManager().getConfig().set(
                     "players." + pcPlayer.getUUID().toString() + ".compass.waypoints",
                     waypointStrings);
+
+            for (String homeName : pcPlayer.getHomes().keySet()) {
+                PCLocation homeLocation = pcPlayer.getHomes().get(homeName);
+                plugin.getPlayerConfigManager().getConfig().set(
+                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".world",
+                        homeLocation.getWorld());
+                plugin.getPlayerConfigManager().getConfig().set(
+                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".x",
+                        homeLocation.getX());
+                plugin.getPlayerConfigManager().getConfig().set(
+                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".y",
+                        homeLocation.getY());
+                plugin.getPlayerConfigManager().getConfig().set(
+                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".z",
+                        homeLocation.getZ());
+            }
         }
 
         plugin.getPlayerConfigManager().saveConfig();

@@ -2,7 +2,9 @@ package nl.svenar.powercore.bukkit.modules.general;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -20,6 +22,7 @@ public class PCPlayer {
     private String banReason;
     private Instant lastSeen;
     private boolean muted;
+    private Map<String, PCLocation> homes;
 
     // Not stored on FS
     private boolean online;
@@ -146,5 +149,51 @@ public class PCPlayer {
 
     public String getLastDirectMessageSender() {
         return lastDirectMessageSender;
+    }
+
+    public void addHome(String name, PCLocation location) {
+        if (homes == null) {
+            homes = new HashMap<String, PCLocation>();
+        }
+
+        homes.put(name, location);
+    }
+
+    public void removeHome(String homeName) {
+        if (homes == null) {
+            homes = new HashMap<String, PCLocation>();
+        }
+
+        for (String name : homes.keySet()) {
+            if (name.equalsIgnoreCase(homeName)) {
+                homes.remove(name);
+                return;
+            }
+        }
+    }
+
+    public void setHomes(Map<String, PCLocation> homes) {
+        this.homes = homes;
+    }
+
+    public Map<String, PCLocation> getHomes() {
+        if (homes == null) {
+            homes = new HashMap<String, PCLocation>();
+        }
+
+        return homes;
+    }
+
+    public boolean hasHome(String homeName) {
+        if (homes == null) {
+            homes = new HashMap<String, PCLocation>();
+        }
+
+        for (String name : homes.keySet()) {
+            if (name.equalsIgnoreCase(homeName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

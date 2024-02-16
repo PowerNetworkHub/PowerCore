@@ -26,13 +26,15 @@ commands:
   weather:
     description: Set the weather
   sun:
-    aliases: [clear]
     description: Set the weather to sunny
   rain:
     description: Set the weather to rainy
   thunder:
     aliases: [storm]
     description: Set the weather to thunder
+  clearinventory:
+    aliases: [ci, clearinv, clear]
+    description: Clear your inventory
   gamemode:
     aliases: [gm]
     description: Set the gamemode for yourself or another player
@@ -124,7 +126,17 @@ commands:
     description: Execute a command as another player
   effect:
     description: Apply an effect to a player
+  hat:
+    description: Put an item on your head
+  home:
+    description: Teleport to a home location
+  sethome:
+    description: Set a home location
+  delhome:
+    description: Delete a home location
 permissions:
+  powercore.reload:
+    default: op
   powercore.compass:
     default: true
   powercore.compass.waypoints:
@@ -134,6 +146,8 @@ permissions:
   powercore.time:
     default: op
   powercore.weather:
+    default: op
+  powercore.clearinventory:
     default: op
   powercore.gamemode.*:
     children:
@@ -230,3 +244,7 @@ permissions:
     default: op
   powercore.effect:
     default: op
+  powercore.hat:
+    default: op
+  powercore.home:
+    default: true

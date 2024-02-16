@@ -1,6 +1,7 @@
 package nl.svenar.powercore.bukkit.commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import co.aikar.commands.BaseCommand;
 import nl.svenar.powercore.bukkit.PowerCore;
@@ -41,5 +42,9 @@ public class PowerBaseCommand extends BaseCommand {
 
     protected void sendMessageRaw(CommandSender sender, String message) {
         sender.sendMessage(message);
+    }
+
+    protected boolean isPlayer(CommandSender sender) {
+        return sender instanceof Player;
     }
 }

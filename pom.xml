@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.svenar</groupId>
 	<artifactId>powercore</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.4</version>
 	<name>PowerCore</name>
 	<description>PowerCore: providing core functionality and features.</description>
 
