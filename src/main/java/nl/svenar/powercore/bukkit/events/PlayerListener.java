@@ -9,6 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -54,6 +55,12 @@ public class PlayerListener implements Listener {
                         plugin.getPluginConfigManager().getConfig().getString("event.join.chat.message")
                                 .replace("{player}", event.getPlayer().getDisplayName()));
         event.setJoinMessage(message);
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getPlayer());
+        pcPlayer.setOnline(true);
     }
 
     @EventHandler

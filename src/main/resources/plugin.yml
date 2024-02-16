@@ -134,6 +134,8 @@ commands:
     description: Set a home location
   delhome:
     description: Delete a home location
+  playerinfo:
+    description: Show information about a player
 permissions:
   powercore.reload:
     default: op
@@ -248,3 +250,5 @@ permissions:
     default: op
   powercore.home:
     default: true
+  powercore.playerinfo:
+    default: op

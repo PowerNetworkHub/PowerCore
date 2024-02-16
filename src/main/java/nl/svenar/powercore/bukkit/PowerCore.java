@@ -17,6 +17,7 @@ import nl.svenar.powercore.bukkit.commands.admin.BanCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KickCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KillCommand;
 import nl.svenar.powercore.bukkit.commands.admin.KillallCommand;
+import nl.svenar.powercore.bukkit.commands.admin.PlayerinfoCommand;
 import nl.svenar.powercore.bukkit.commands.admin.ReloadCommand;
 import nl.svenar.powercore.bukkit.commands.admin.StatsCommand;
 import nl.svenar.powercore.bukkit.commands.admin.SudoCommand;
@@ -344,6 +345,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new KillCommand(this));
         this.acfManager.registerCommand(new KillallCommand(this));
         this.acfManager.registerCommand(new SudoCommand(this));
+        this.acfManager.registerCommand(new PlayerinfoCommand(this));
 
         // Compass commands
         this.acfManager.registerCommand(new CompassCommand(this));

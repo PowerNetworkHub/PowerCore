@@ -47,4 +47,8 @@ public class PowerBaseCommand extends BaseCommand {
     protected boolean isPlayer(CommandSender sender) {
         return sender instanceof Player;
     }
+
+    protected String repeatChar(String character, int count) {
+        return new String(new char[count]).replace("\0", character);
+    }
 }
