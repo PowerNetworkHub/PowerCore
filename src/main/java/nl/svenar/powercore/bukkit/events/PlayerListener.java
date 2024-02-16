@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import nl.svenar.powercore.bukkit.PowerCore;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
+import nl.svenar.powercore.common.utils.PowerColor;
 
 public class PlayerListener implements Listener {
 
@@ -55,12 +56,19 @@ public class PlayerListener implements Listener {
                         plugin.getPluginConfigManager().getConfig().getString("event.join.chat.message")
                                 .replace("{player}", event.getPlayer().getDisplayName()));
         event.setJoinMessage(message);
+
+        int numUnreadMail = (int) pcPlayer.getMail().stream().filter(mail -> !mail.isRead()).count();
+        if (numUnreadMail > 0) {
+            event.getPlayer().sendMessage(PowerColor.ChatColor.BLACK + "[" + PowerColor.ChatColor.DARK_PURPLE + "!" + PowerColor.ChatColor.BLACK + "] "
+                    + PowerColor.ChatColor.GRAY + "You have " + numUnreadMail + " unread mail" + (numUnreadMail != 1 ? "s" : ""));
+        }
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         PCPlayer pcPlayer = plugin.getPCPlayerHandler().getPlayer(event.getPlayer());
         pcPlayer.setOnline(true);
+        plugin.getAFKManager().resetPlayerActivity(pcPlayer.getUUID());
     }
 
     @EventHandler
@@ -104,5 +112,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             event.getPlayer().sendMessage(ChatColor.RED + "You are muted");
         }
+
+        plugin.getAFKManager().resetPlayerActivity(pcPlayer.getUUID());
     }
 }

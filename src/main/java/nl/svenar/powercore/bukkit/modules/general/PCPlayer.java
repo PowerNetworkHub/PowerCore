@@ -23,10 +23,12 @@ public class PCPlayer {
     private Instant lastSeen;
     private boolean muted;
     private Map<String, PCLocation> homes;
+    private List<PCMail> mail;
 
     // Not stored on FS
     private boolean online;
     private String lastDirectMessageSender;
+    private boolean afk;
 
     public PCPlayer(UUID uuid, String name) {
         this.uuid = uuid;
@@ -195,5 +197,54 @@ public class PCPlayer {
             }
         }
         return false;
+    }
+
+    public void addMail(PCMail mail) {
+        if (this.mail == null) {
+            this.mail = new ArrayList<PCMail>();
+        }
+
+        this.mail.add(mail);
+    }
+
+    public void removeMail(PCMail mail) {
+        if (this.mail == null) {
+            this.mail = new ArrayList<PCMail>();
+        }
+
+        this.mail.remove(mail);
+    }
+
+    public void setMail(List<PCMail> mail) {
+        this.mail = mail;
+    }
+
+    public List<PCMail> getMail() {
+        if (mail == null) {
+            mail = new ArrayList<PCMail>();
+        }
+
+        return mail;
+    }
+
+    public PCMail getMail(String title) {
+        if (mail == null) {
+            mail = new ArrayList<PCMail>();
+        }
+
+        for (PCMail mail : mail) {
+            if (mail.getTitle().equalsIgnoreCase(title)) {
+                return mail;
+            }
+        }
+        return null;
+    }
+
+    public void setAFK(boolean afk) {
+        this.afk = afk;
+    }
+
+    public boolean isAFK() {
+        return afk;
     }
 }

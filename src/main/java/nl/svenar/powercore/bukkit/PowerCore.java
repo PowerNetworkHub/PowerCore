@@ -36,7 +36,12 @@ import nl.svenar.powercore.bukkit.commands.home.HomeCommand;
 import nl.svenar.powercore.bukkit.commands.home.SetHomeCommand;
 import nl.svenar.powercore.bukkit.commands.item.ItemLoreCommand;
 import nl.svenar.powercore.bukkit.commands.item.ItemNameCommand;
+import nl.svenar.powercore.bukkit.commands.mail.DeleteMailCommand;
+import nl.svenar.powercore.bukkit.commands.mail.MailCommand;
+import nl.svenar.powercore.bukkit.commands.mail.ReadMailCommand;
+import nl.svenar.powercore.bukkit.commands.mail.SendMailCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
+import nl.svenar.powercore.bukkit.commands.player.AFKCommand;
 import nl.svenar.powercore.bukkit.commands.player.BurnCommand;
 import nl.svenar.powercore.bukkit.commands.player.ClearInventoryCommand;
 import nl.svenar.powercore.bukkit.commands.player.EffectCommand;
@@ -84,6 +89,8 @@ import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistListCommand;
 import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistRemoveCommand;
 import nl.svenar.powercore.bukkit.events.PlayerListener;
 import nl.svenar.powercore.bukkit.modules.compass.CompassHandler;
+import nl.svenar.powercore.bukkit.modules.general.AFKManager;
+import nl.svenar.powercore.bukkit.modules.general.PCMail;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
 import nl.svenar.powercore.bukkit.storage.ConfigManager;
 import nl.svenar.powercore.bukkit.storage.PCPlayerHandler;
@@ -97,6 +104,7 @@ public class PowerCore extends JavaPlugin {
     private PaperCommandManager acfManager;
     private CompassHandler compassHandler;
     private PCPlayerHandler pcPlayerHandler;
+    private AFKManager afkManager;
 
     private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager, warpConfigManager,
             whitelistConfigManager;
@@ -166,6 +174,10 @@ public class PowerCore extends JavaPlugin {
             this.pcPlayerHandler.savePlayers();
         }
 
+        if (this.afkManager != null) {
+            this.afkManager.stopTask();
+        }
+
         pluginConfigManager.saveConfig();
         playerConfigManager.saveConfig();
         spawnConfigManager.saveConfig();
@@ -216,6 +228,7 @@ public class PowerCore extends JavaPlugin {
         pluginConfigManager.addDefault("event.leave.chat.message", "&0[&4-&0] &7{player} has left the game");
         pluginConfigManager.addDefault("player.default.compass.enabled", false);
         pluginConfigManager.addDefault("command.spawnmob.limit", 10);
+        pluginConfigManager.addDefault("afk.timeout", 300);
     }
 
     public void loadPlayerConfig() {
@@ -280,6 +293,15 @@ public class PowerCore extends JavaPlugin {
                         homes.add(home);
                     }
                     return homes;
+                });
+
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("pcmails",
+                c -> {
+                    List<String> mails = new ArrayList<>();
+                    for (PCMail mail : pcPlayerHandler.getPlayer(c.getIssuer().getUniqueId()).getMail()) {
+                        mails.add(mail.getTitle());
+                    }
+                    return mails;
                 });
 
         this.acfManager.getCommandCompletions().registerAsyncCompletion("pcplayers",
@@ -403,6 +425,13 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new EffectCommand(this));
         this.acfManager.registerCommand(new HatCommand(this));
         this.acfManager.registerCommand(new ClearInventoryCommand(this));
+        this.acfManager.registerCommand(new AFKCommand(this));
+
+        // Mail commands
+        this.acfManager.registerCommand(new MailCommand(this));
+        this.acfManager.registerCommand(new SendMailCommand(this));
+        this.acfManager.registerCommand(new ReadMailCommand(this));
+        this.acfManager.registerCommand(new DeleteMailCommand(this));
 
         // Spawn commands
         this.acfManager.registerCommand(new SpawnCommand(this));
@@ -443,6 +472,9 @@ public class PowerCore extends JavaPlugin {
 
         compassHandler = new CompassHandler(this);
         compassHandler.start();
+
+        afkManager = new AFKManager(this);
+        afkManager.setupTask(this);
     }
 
     /**
@@ -524,5 +556,14 @@ public class PowerCore extends JavaPlugin {
      */
     public ConfigManager getWhitelistConfigManager() {
         return whitelistConfigManager;
+    }
+
+    /**
+     * Get the AFKManager instance
+     * 
+     * @return AFKManager
+     */
+    public AFKManager getAFKManager() {
+        return afkManager;
     }
 }

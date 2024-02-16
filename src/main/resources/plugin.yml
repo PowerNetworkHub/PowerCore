@@ -136,6 +136,10 @@ commands:
     description: Delete a home location
   playerinfo:
     description: Show information about a player
+  mail:
+    description: Send mail to a player
+  afk:
+    description: Toggle afk mode on/off
 permissions:
   powercore.reload:
     default: op
@@ -252,3 +256,9 @@ permissions:
     default: true
   powercore.playerinfo:
     default: op
+  powercore.mail:
+    default: true
+  powercore.afk:
+    default: true
+  powercore.afk.bypass:
+    default: false

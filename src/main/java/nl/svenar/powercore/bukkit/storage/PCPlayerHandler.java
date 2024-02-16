@@ -1,5 +1,8 @@
 package nl.svenar.powercore.bukkit.storage;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import nl.svenar.powercore.bukkit.PowerCore;
 import nl.svenar.powercore.bukkit.modules.general.PCLocation;
+import nl.svenar.powercore.bukkit.modules.general.PCMail;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
 import nl.svenar.powercore.bukkit.modules.general.Waypoint;
 import nl.svenar.powercore.bukkit.utils.TimeConverter;
@@ -37,50 +41,50 @@ public class PCPlayerHandler {
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".compass.enabled")) {
                 pcPlayer.setCompassEnabled(plugin.getPlayerConfigManager().getConfig()
-                        .getBoolean("players." + uuidString + ".compass.enabled"));
+                    .getBoolean("players." + uuidString + ".compass.enabled"));
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".ban.is_banned")) {
                 pcPlayer.setBanned(plugin.getPlayerConfigManager().getConfig()
-                        .getBoolean("players." + uuidString + ".ban.is_banned"));
+                    .getBoolean("players." + uuidString + ".ban.is_banned"));
             }
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".ban.reason")) {
                 pcPlayer.setBanReason(plugin.getPlayerConfigManager().getConfig()
-                        .getString("players." + uuidString + ".ban.reason"));
+                    .getString("players." + uuidString + ".ban.reason"));
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".last_seen")) {
                 pcPlayer.setLastSeen(TimeConverter.stringToInstant(plugin.getPlayerConfigManager().getConfig()
-                        .getString("players." + uuidString + ".last_seen")));
+                    .getString("players." + uuidString + ".last_seen")));
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".muted")) {
                 pcPlayer.setMuted(plugin.getPlayerConfigManager().getConfig()
-                        .getBoolean("players." + uuidString + ".muted"));
+                    .getBoolean("players." + uuidString + ".muted"));
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".logout_location")) {
                 double x = plugin.getPlayerConfigManager().getConfig()
-                        .getDouble("players." + uuidString + ".logout_location.x");
+                    .getDouble("players." + uuidString + ".logout_location.x");
                 double y = plugin.getPlayerConfigManager().getConfig()
-                        .getDouble("players." + uuidString + ".logout_location.y");
+                    .getDouble("players." + uuidString + ".logout_location.y");
                 double z = plugin.getPlayerConfigManager().getConfig()
-                        .getDouble("players." + uuidString + ".logout_location.z");
+                    .getDouble("players." + uuidString + ".logout_location.z");
                 String world = plugin.getPlayerConfigManager().getConfig().getString(
-                        "players." + uuidString + ".logout_location.world");
+                    "players." + uuidString + ".logout_location.world");
                 PCLocation logoutLocation = new PCLocation(world, x, y, z);
                 pcPlayer.setLogoutLocation(logoutLocation);
             }
 
             if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".last_location")) {
                 double x = plugin.getPlayerConfigManager().getConfig()
-                        .getDouble("players." + uuidString + ".last_location.x");
+                    .getDouble("players." + uuidString + ".last_location.x");
                 double y = plugin.getPlayerConfigManager().getConfig()
-                        .getDouble("players." + uuidString + ".last_location.y");
+                    .getDouble("players." + uuidString + ".last_location.y");
                 double z = plugin.getPlayerConfigManager().getConfig()
-                        .getDouble("players." + uuidString + ".last_location.z");
+                    .getDouble("players." + uuidString + ".last_location.z");
                 String world = plugin.getPlayerConfigManager().getConfig().getString(
-                        "players." + uuidString + ".last_location.world");
+                    "players." + uuidString + ".last_location.world");
                 PCLocation lasLocation = new PCLocation(world, x, y, z);
                 pcPlayer.setLogoutLocation(lasLocation);
             }
@@ -100,16 +104,36 @@ public class PCPlayerHandler {
                 for (String homeName : plugin.getPlayerConfigManager().getConfig()
                         .getConfigurationSection("players." + uuidString + ".homes").getKeys(false)) {
                     String world = plugin.getPlayerConfigManager().getConfig()
-                            .getString("players." + uuidString + ".homes." + homeName + ".world");
+                        .getString("players." + uuidString + ".homes." + homeName + ".world");
                     double x = plugin.getPlayerConfigManager().getConfig()
-                            .getDouble("players." + uuidString + ".homes." + homeName + ".x");
+                        .getDouble("players." + uuidString + ".homes." + homeName + ".x");
                     double y = plugin.getPlayerConfigManager().getConfig().getDouble(
-                            "players." + uuidString + ".homes." + homeName + ".y");
+                        "players." + uuidString + ".homes." + homeName + ".y");
                     double z = plugin.getPlayerConfigManager().getConfig()
-                            .getDouble("players." + uuidString + ".homes." + homeName + ".z");
+                        .getDouble("players." + uuidString + ".homes." + homeName + ".z");
 
                     PCLocation homeLocation = new PCLocation(world, x, y, z);
                     pcPlayer.addHome(homeName, homeLocation);
+                }
+            }
+
+            if (plugin.getPlayerConfigManager().getConfig().contains("players." + uuidString + ".mails")
+                    && plugin.getPlayerConfigManager().getConfig()
+                            .isConfigurationSection("players." + uuidString + ".mails")) {
+                for (String mailTimestamp : plugin.getPlayerConfigManager().getConfig()
+                        .getConfigurationSection("players." + uuidString + ".mails").getKeys(false)) {
+                    UUID senderUUID = UUID.fromString(plugin.getPlayerConfigManager().getConfig()
+                        .getString("players." + uuidString + ".mails." + mailTimestamp + ".sender"));
+                    String title = plugin.getPlayerConfigManager().getConfig()
+                        .getString("players." + uuidString + ".mails." + mailTimestamp + ".title");
+                    String message = plugin.getPlayerConfigManager().getConfig()
+                        .getString("players." + uuidString + ".mails." + mailTimestamp + ".message");
+                    boolean read = plugin.getPlayerConfigManager().getConfig()
+                        .getBoolean("players." + uuidString + ".mails." + mailTimestamp + ".read");
+
+                    pcPlayer.addMail(
+                        new PCMail(senderUUID, title, message, TimeConverter.stringToInstant(mailTimestamp),
+                                read));
                 }
             }
 
@@ -121,53 +145,53 @@ public class PCPlayerHandler {
         for (PCPlayer pcPlayer : players.values()) {
 
             plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".name",
-                    pcPlayer.getName());
+                pcPlayer.getName());
 
             plugin.getPlayerConfigManager().getConfig()
-                    .set("players." + pcPlayer.getUUID().toString() + ".compass.enabled", pcPlayer.isCompassEnabled());
+                .set("players." + pcPlayer.getUUID().toString() + ".compass.enabled", pcPlayer.isCompassEnabled());
 
             plugin.getPlayerConfigManager().getConfig()
-                    .set("players." + pcPlayer.getUUID().toString() + ".ban.is_banned", pcPlayer.isBanned());
+                .set("players." + pcPlayer.getUUID().toString() + ".ban.is_banned", pcPlayer.isBanned());
             plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".ban.reason",
-                    pcPlayer.getBanReason() != null ? pcPlayer.getBanReason() : "");
+                pcPlayer.getBanReason() != null ? pcPlayer.getBanReason() : "");
 
             plugin.getPlayerConfigManager().getConfig()
-                    .set("players." + pcPlayer.getUUID().toString() + ".muted", pcPlayer.isMuted());
+                .set("players." + pcPlayer.getUUID().toString() + ".muted", pcPlayer.isMuted());
 
             if (pcPlayer.getLastSeen() != null) {
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".last_seen",
-                        TimeConverter.instantToString(pcPlayer.getLastSeen()));
+                    "players." + pcPlayer.getUUID().toString() + ".last_seen",
+                    TimeConverter.instantToString(pcPlayer.getLastSeen()));
             }
 
             if (pcPlayer.getLogoutLocation() != null) {
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".logout_location.x",
-                        pcPlayer.getLogoutLocation().getX());
+                    "players." + pcPlayer.getUUID().toString() + ".logout_location.x",
+                    pcPlayer.getLogoutLocation().getX());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".logout_location.y",
-                        pcPlayer.getLogoutLocation().getY());
+                    "players." + pcPlayer.getUUID().toString() + ".logout_location.y",
+                    pcPlayer.getLogoutLocation().getY());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".logout_location.z",
-                        pcPlayer.getLogoutLocation().getZ());
+                    "players." + pcPlayer.getUUID().toString() + ".logout_location.z",
+                    pcPlayer.getLogoutLocation().getZ());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".logout_location.world",
-                        pcPlayer.getLogoutLocation().getWorld());
+                    "players." + pcPlayer.getUUID().toString() + ".logout_location.world",
+                    pcPlayer.getLogoutLocation().getWorld());
             }
 
             if (pcPlayer.getLastLocation() != null) {
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".last_location.x",
-                        pcPlayer.getLastLocation().getX());
+                    "players." + pcPlayer.getUUID().toString() + ".last_location.x",
+                    pcPlayer.getLastLocation().getX());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".last_location.y",
-                        pcPlayer.getLastLocation().getY());
+                    "players." + pcPlayer.getUUID().toString() + ".last_location.y",
+                    pcPlayer.getLastLocation().getY());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".last_location.z",
-                        pcPlayer.getLastLocation().getZ());
+                    "players." + pcPlayer.getUUID().toString() + ".last_location.z",
+                    pcPlayer.getLastLocation().getZ());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".last_location.world",
-                        pcPlayer.getLastLocation().getWorld());
+                    "players." + pcPlayer.getUUID().toString() + ".last_location.world",
+                    pcPlayer.getLastLocation().getWorld());
             }
 
             List<String> waypointStrings = new ArrayList<>();
@@ -175,23 +199,44 @@ public class PCPlayerHandler {
                 waypointStrings.add(waypoint.toString());
             }
             plugin.getPlayerConfigManager().getConfig().set(
-                    "players." + pcPlayer.getUUID().toString() + ".compass.waypoints",
-                    waypointStrings);
+                "players." + pcPlayer.getUUID().toString() + ".compass.waypoints",
+                waypointStrings);
 
+            plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".homes", null);
             for (String homeName : pcPlayer.getHomes().keySet()) {
                 PCLocation homeLocation = pcPlayer.getHomes().get(homeName);
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".world",
-                        homeLocation.getWorld());
+                    "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".world",
+                    homeLocation.getWorld());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".x",
-                        homeLocation.getX());
+                    "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".x",
+                    homeLocation.getX());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".y",
-                        homeLocation.getY());
+                    "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".y",
+                    homeLocation.getY());
                 plugin.getPlayerConfigManager().getConfig().set(
-                        "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".z",
-                        homeLocation.getZ());
+                    "players." + pcPlayer.getUUID().toString() + ".homes." + homeName + ".z",
+                    homeLocation.getZ());
+            }
+
+            plugin.getPlayerConfigManager().getConfig().set("players." + pcPlayer.getUUID().toString() + ".mails", null);
+            for (PCMail mail : pcPlayer.getMail()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                ZonedDateTime zonedDateTime = mail.getTimestamp().atZone(ZoneId.systemDefault());
+                String formattedDateTime = formatter.format(zonedDateTime);
+
+                plugin.getPlayerConfigManager().getConfig().set(
+                    "players." + pcPlayer.getUUID().toString() + ".mails." + formattedDateTime + ".sender",
+                    mail.getSenderUUID().toString());
+                plugin.getPlayerConfigManager().getConfig().set(
+                    "players." + pcPlayer.getUUID().toString() + ".mails." + formattedDateTime + ".title",
+                    mail.getTitle());
+                plugin.getPlayerConfigManager().getConfig().set(
+                    "players." + pcPlayer.getUUID().toString() + ".mails." + formattedDateTime + ".message",
+                    mail.getMessage());
+                plugin.getPlayerConfigManager().getConfig().set(
+                    "players." + pcPlayer.getUUID().toString() + ".mails." + formattedDateTime + ".read",
+                    mail.isRead());
             }
         }
 
