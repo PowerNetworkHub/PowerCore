@@ -67,6 +67,9 @@ import nl.svenar.powercore.bukkit.commands.teleport.BackCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.OfflineTeleportCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.TeleportCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.TopCommand;
+import nl.svenar.powercore.bukkit.commands.teleport.tpa.TPACommand;
+import nl.svenar.powercore.bukkit.commands.teleport.tpa.TPAcceptCommand;
+import nl.svenar.powercore.bukkit.commands.teleport.tpa.TPDenyCommand;
 import nl.svenar.powercore.bukkit.commands.time.DayCommand;
 import nl.svenar.powercore.bukkit.commands.time.MidnightCommand;
 import nl.svenar.powercore.bukkit.commands.time.NightCommand;
@@ -92,6 +95,7 @@ import nl.svenar.powercore.bukkit.modules.compass.CompassHandler;
 import nl.svenar.powercore.bukkit.modules.general.AFKManager;
 import nl.svenar.powercore.bukkit.modules.general.PCMail;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
+import nl.svenar.powercore.bukkit.modules.general.TPAManager;
 import nl.svenar.powercore.bukkit.storage.ConfigManager;
 import nl.svenar.powercore.bukkit.storage.PCPlayerHandler;
 import nl.svenar.powercore.bukkit.utils.Chat;
@@ -105,6 +109,7 @@ public class PowerCore extends JavaPlugin {
     private CompassHandler compassHandler;
     private PCPlayerHandler pcPlayerHandler;
     private AFKManager afkManager;
+    private TPAManager tpaManager;
 
     private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager, warpConfigManager,
             whitelistConfigManager;
@@ -178,6 +183,10 @@ public class PowerCore extends JavaPlugin {
             this.afkManager.stopTask();
         }
 
+        if (this.tpaManager != null) {
+            this.tpaManager.stopTask();
+        }
+
         pluginConfigManager.saveConfig();
         playerConfigManager.saveConfig();
         spawnConfigManager.saveConfig();
@@ -229,6 +238,7 @@ public class PowerCore extends JavaPlugin {
         pluginConfigManager.addDefault("player.default.compass.enabled", false);
         pluginConfigManager.addDefault("command.spawnmob.limit", 10);
         pluginConfigManager.addDefault("afk.timeout", 300);
+        pluginConfigManager.addDefault("tpa.timeout", 120);
     }
 
     public void loadPlayerConfig() {
@@ -404,6 +414,10 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new OfflineTeleportCommand(this));
         this.acfManager.registerCommand(new TopCommand(this));
         this.acfManager.registerCommand(new BackCommand(this));
+        // TPA commands
+        this.acfManager.registerCommand(new TPACommand(this));
+        this.acfManager.registerCommand(new TPAcceptCommand(this));
+        this.acfManager.registerCommand(new TPDenyCommand(this));
 
         // Player commands
         this.acfManager.registerCommand(new FlyCommand(this));
@@ -475,6 +489,9 @@ public class PowerCore extends JavaPlugin {
 
         afkManager = new AFKManager(this);
         afkManager.setupTask(this);
+
+        tpaManager = new TPAManager(this);
+        tpaManager.setupTask(this);
     }
 
     /**
@@ -565,5 +582,14 @@ public class PowerCore extends JavaPlugin {
      */
     public AFKManager getAFKManager() {
         return afkManager;
+    }
+
+    /**
+     * Get the TPAManager instance
+     * 
+     * @return TPAManager
+     */
+    public TPAManager getTPAManager() {
+        return tpaManager;
     }
 }

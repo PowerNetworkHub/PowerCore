@@ -29,11 +29,15 @@ public class PCPlayer {
     private boolean online;
     private String lastDirectMessageSender;
     private boolean afk;
+    private Map<UUID, Instant> tpaBuffer;
 
     public PCPlayer(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
-        waypoints = new ArrayList<>();
+        this.waypoints = new ArrayList<>();
+        this.homes = new HashMap<>();
+        this.mail = new ArrayList<>();
+        this.tpaBuffer = new HashMap<>();
     }
 
     public UUID getUUID() {
@@ -246,5 +250,21 @@ public class PCPlayer {
 
     public boolean isAFK() {
         return afk;
+    }
+
+    public void addTpaBuffer(UUID uuid, Instant time) {
+        tpaBuffer.put(uuid, time);
+    }
+
+    public void removeTpaBuffer(UUID uuid) {
+        tpaBuffer.remove(uuid);
+    }
+
+    public void setTpaBuffer(Map<UUID, Instant> tpaBuffer) {
+        this.tpaBuffer = tpaBuffer;
+    }
+
+    public Map<UUID, Instant> getTpaBuffer() {
+        return tpaBuffer;
     }
 }

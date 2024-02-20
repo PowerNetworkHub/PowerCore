@@ -291,4 +291,8 @@ public class PCPlayerHandler {
         return playerNames;
     }
 
+    public List<PCPlayer> getPCPlayers() {
+        return new ArrayList<>(players.values());
+    }
+
 }
