@@ -36,6 +36,7 @@ import nl.svenar.powercore.bukkit.commands.home.HomeCommand;
 import nl.svenar.powercore.bukkit.commands.home.SetHomeCommand;
 import nl.svenar.powercore.bukkit.commands.item.ItemLoreCommand;
 import nl.svenar.powercore.bukkit.commands.item.ItemNameCommand;
+import nl.svenar.powercore.bukkit.commands.kit.KitCommand;
 import nl.svenar.powercore.bukkit.commands.mail.DeleteMailCommand;
 import nl.svenar.powercore.bukkit.commands.mail.MailCommand;
 import nl.svenar.powercore.bukkit.commands.mail.ReadMailCommand;
@@ -94,6 +95,7 @@ import nl.svenar.powercore.bukkit.commands.whitelist.WhitelistRemoveCommand;
 import nl.svenar.powercore.bukkit.events.PlayerListener;
 import nl.svenar.powercore.bukkit.modules.compass.CompassHandler;
 import nl.svenar.powercore.bukkit.modules.general.AFKManager;
+import nl.svenar.powercore.bukkit.modules.general.KitManager;
 import nl.svenar.powercore.bukkit.modules.general.PCMail;
 import nl.svenar.powercore.bukkit.modules.general.PCPlayer;
 import nl.svenar.powercore.bukkit.modules.general.TPAManager;
@@ -111,9 +113,10 @@ public class PowerCore extends JavaPlugin {
     private PCPlayerHandler pcPlayerHandler;
     private AFKManager afkManager;
     private TPAManager tpaManager;
+    private KitManager kitManager;
 
     private ConfigManager pluginConfigManager, playerConfigManager, spawnConfigManager, warpConfigManager,
-            whitelistConfigManager;
+            whitelistConfigManager, kitConfigManager;
 
     private Instant startupTime;
 
@@ -188,11 +191,16 @@ public class PowerCore extends JavaPlugin {
             this.tpaManager.stopTask();
         }
 
+        if (this.kitManager != null) {
+            this.kitManager.saveKits();
+        }
+
         pluginConfigManager.saveConfig();
         playerConfigManager.saveConfig();
         spawnConfigManager.saveConfig();
         warpConfigManager.saveConfig();
         whitelistConfigManager.saveConfig();
+        kitConfigManager.saveConfig();
 
         Chat chat = new Chat();
         chat.console("");
@@ -228,6 +236,7 @@ public class PowerCore extends JavaPlugin {
         loadSpawnConfig();
         loadWarpConfig();
         loadWhitelistConfig();
+        loadKitConfig();
     }
 
     public void loadPluginConfig() {
@@ -262,6 +271,11 @@ public class PowerCore extends JavaPlugin {
         whitelistConfigManager.addDefault("whitelist.players", new String[] {});
     }
 
+    public void loadKitConfig() {
+        kitConfigManager = new ConfigManager(this, "kits.yml", false);
+        kitConfigManager.addDefault("kits", new String[] {});
+    }
+
     /**
      * Setup the listeners for the plugin
      * Load order for the listeners does not matter
@@ -288,6 +302,11 @@ public class PowerCore extends JavaPlugin {
 
         this.acfManager.getCommandCompletions().registerAsyncCompletion("reloadable",
                 c -> Arrays.asList("config", "players", "spawn", "warps", "whitelist", "all"));
+
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("pckits",
+                c -> {
+                    return kitManager.getKits().stream().map(kit -> kit.getName()).collect(Collectors.toList());
+                });
 
         this.acfManager.getCommandCompletions().registerAsyncCompletion("effects", c -> {
             List<String> effects = new ArrayList<>();
@@ -473,6 +492,9 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new SetHomeCommand(this));
         this.acfManager.registerCommand(new DelHomeCommand(this));
 
+        // Kit commands
+        this.acfManager.registerCommand(new KitCommand(this));
+
         // Other commands
         this.acfManager.registerCommand(new SpawnMobCommand(this));
     }
@@ -494,6 +516,9 @@ public class PowerCore extends JavaPlugin {
 
         tpaManager = new TPAManager(this);
         tpaManager.setupTask(this);
+
+        kitManager = new KitManager(this);
+        kitManager.loadKits();
     }
 
     /**
@@ -578,6 +603,15 @@ public class PowerCore extends JavaPlugin {
     }
 
     /**
+     * Get the Config manager for kit data
+     * 
+     * @return ConfigManager
+     */
+    public ConfigManager getKitConfigManager() {
+        return kitConfigManager;
+    }
+
+    /**
      * Get the AFKManager instance
      * 
      * @return AFKManager
@@ -593,5 +627,14 @@ public class PowerCore extends JavaPlugin {
      */
     public TPAManager getTPAManager() {
         return tpaManager;
+    }
+
+    /**
+     * Get the KitManager instance
+     * 
+     * @return KitManager
+     */
+    public KitManager getKitManager() {
+        return kitManager;
     }
 }
