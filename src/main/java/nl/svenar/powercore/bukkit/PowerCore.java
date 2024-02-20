@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.Registry;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionType;
@@ -41,6 +42,8 @@ import nl.svenar.powercore.bukkit.commands.mail.DeleteMailCommand;
 import nl.svenar.powercore.bukkit.commands.mail.MailCommand;
 import nl.svenar.powercore.bukkit.commands.mail.ReadMailCommand;
 import nl.svenar.powercore.bukkit.commands.mail.SendMailCommand;
+import nl.svenar.powercore.bukkit.commands.other.EnchantCommand;
+import nl.svenar.powercore.bukkit.commands.other.ForceEnchantCommand;
 import nl.svenar.powercore.bukkit.commands.other.SpawnMobCommand;
 import nl.svenar.powercore.bukkit.commands.player.AFKCommand;
 import nl.svenar.powercore.bukkit.commands.player.BurnCommand;
@@ -316,6 +319,13 @@ public class PowerCore extends JavaPlugin {
             return effects;
         });
 
+        this.acfManager.getCommandCompletions().registerAsyncCompletion("enchantments",
+                c -> {
+                    return Registry.ENCHANTMENT.stream()
+                            .map((enchantment) -> enchantment.getKey().getKey().toLowerCase())
+                            .collect(Collectors.toList());
+                });
+
         this.acfManager.getCommandCompletions().registerAsyncCompletion("pchomes",
                 c -> {
                     List<String> homes = new ArrayList<>();
@@ -497,6 +507,8 @@ public class PowerCore extends JavaPlugin {
 
         // Other commands
         this.acfManager.registerCommand(new SpawnMobCommand(this));
+        this.acfManager.registerCommand(new EnchantCommand(this));
+        this.acfManager.registerCommand(new ForceEnchantCommand(this));
     }
 
     /**

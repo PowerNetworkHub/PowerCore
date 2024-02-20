@@ -150,6 +150,12 @@ commands:
     description: Deny a teleport request
   rtp:
     description: Teleport to a random location
+  kit:
+    description: Base command for kits
+  enchant:
+    description: Enchant an item
+  forceenchant:
+    description: Enchant an item ignoring enchantment level restrictions
 permissions:
   powercore.reload:
     default: op
@@ -277,4 +283,12 @@ permissions:
   powercore.rtp:
     default: true
   powercore.rtp.admin:
+    default: op
+  powercore.kit:
+    default: true
+  powercore.kit.admin:
+    default: op
+  powercore.enchant:
+    default: op
+  powercore.enchant.force:
     default: op
