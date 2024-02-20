@@ -90,10 +90,17 @@ public class KitCommand extends PowerBaseCommand {
             return;
         }
 
+        Player player = (Player) sender;
+
         sendMessage(sender,
-                PowerColor.ChatColor.GREEN + "Available kits (" + plugin.getKitManager().getKits().size() + "):");
+                PowerColor.ChatColor.GREEN + "Available kits (" + plugin.getKitManager().getKits().stream()
+                        .filter(kit -> player.hasPermission("powercore.kit." + kit.getName())).count() + "):");
         for (PCKit kit : plugin.getKitManager().getKits()) {
-            sendMessage(sender, PowerColor.ChatColor.GREEN + "- " + kit.getName());
+            if (player.hasPermission("powercore.kit." + kit.getName())) {
+                sendMessage(sender,
+                        (kit.isOnCooldown(player.getUniqueId()) ? PowerColor.ChatColor.RED : PowerColor.ChatColor.GREEN)
+                                + "- " + kit.getName());
+            }
         }
     }
 
@@ -112,6 +119,12 @@ public class KitCommand extends PowerBaseCommand {
         }
 
         Player player = (Player) sender;
+
+        if (!player.hasPermission("powercore.kit." + kitName)) {
+            sendMessage(sender, PowerColor.ChatColor.RED + "You do not have permission to use this kit.");
+            return;
+        }
+
         KitResult result = plugin.getKitManager().giveKit(player, kitName);
         switch (result) {
             case KIT_NOT_FOUND:
