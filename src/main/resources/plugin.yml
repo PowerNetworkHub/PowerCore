@@ -140,6 +140,16 @@ commands:
     description: Send mail to a player
   afk:
     description: Toggle afk mode on/off
+  tpa:
+    description: Request to teleport to a player
+  tpaccept:
+    aliases: [tpyes, tpaa]
+    description: Accept a teleport request
+  tpdeny:
+    aliases: [tpno, tpad]
+    description: Deny a teleport request
+  rtp:
+    description: Teleport to a random location
 permissions:
   powercore.reload:
     default: op
@@ -262,3 +272,9 @@ permissions:
     default: true
   powercore.afk.bypass:
     default: false
+  powercore.tpa:
+    default: true
+  powercore.rtp:
+    default: true
+  powercore.rtp.admin:
+    default: op

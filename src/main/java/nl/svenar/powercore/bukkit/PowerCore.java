@@ -65,6 +65,7 @@ import nl.svenar.powercore.bukkit.commands.player.SeenCommand;
 import nl.svenar.powercore.bukkit.commands.player.SmiteCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.BackCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.OfflineTeleportCommand;
+import nl.svenar.powercore.bukkit.commands.teleport.RandomTeleportCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.TeleportCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.TopCommand;
 import nl.svenar.powercore.bukkit.commands.teleport.tpa.TPACommand;
@@ -414,6 +415,7 @@ public class PowerCore extends JavaPlugin {
         this.acfManager.registerCommand(new OfflineTeleportCommand(this));
         this.acfManager.registerCommand(new TopCommand(this));
         this.acfManager.registerCommand(new BackCommand(this));
+        this.acfManager.registerCommand(new RandomTeleportCommand(this));
         // TPA commands
         this.acfManager.registerCommand(new TPACommand(this));
         this.acfManager.registerCommand(new TPAcceptCommand(this));
